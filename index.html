@@ -84,7 +84,8 @@
             letter-spacing: 0.3px;
         }
 
-        input[type="text"] {
+        input[type="text"],
+        textarea {
             width: 100%;
             padding: 14px 16px;
             background: rgba(255, 255, 255, 0.08);
@@ -93,17 +94,26 @@
             color: #ffffff;
             font-size: 16px;
             transition: all 0.3s ease;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        input[type="text"]:focus {
+        input[type="text"]:focus,
+        textarea:focus {
             outline: none;
             border-color: #00d4ff;
             background: rgba(255, 255, 255, 0.12);
             box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
         }
 
-        input[type="text"]::placeholder {
+        input[type="text"]::placeholder,
+        textarea::placeholder {
             color: #606060;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-size: 14px;
         }
 
         .button-group {
@@ -148,6 +158,21 @@
             color: #ffffff;
         }
 
+        .btn-ask {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            color: #001a33;
+            flex: 1;
+        }
+
+        .btn-ask:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn-ask:active {
+            transform: translateY(0);
+        }
+
         .result-box {
             margin-top: 25px;
             padding: 20px;
@@ -158,6 +183,20 @@
         }
 
         .result-box.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        .ai-response-box {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 10px;
+            display: none;
+        }
+
+        .ai-response-box.show {
             display: block;
             animation: slideIn 0.3s ease;
         }
@@ -276,6 +315,13 @@
             border-left-color: #ff9696;
         }
 
+        .ai-response-text {
+            font-size: 14px;
+            color: #e0e0e0;
+            line-height: 1.8;
+            color: #c8e6ff;
+        }
+
         .error-message {
             color: #ff6b6b;
             font-size: 13px;
@@ -298,6 +344,12 @@
             line-height: 1.6;
         }
 
+        .section-divider {
+            height: 1px;
+            background: rgba(0, 212, 255, 0.2);
+            margin: 30px 0;
+        }
+
         @media (max-width: 480px) {
             .card {
                 padding: 20px;
@@ -318,6 +370,10 @@
             button {
                 width: 100%;
             }
+
+            textarea {
+                min-height: 80px;
+            }
         }
     </style>
 </head>
@@ -329,6 +385,7 @@
         </div>
 
         <div class="card">
+            <!-- CALCULADORA DE MEDIA -->
             <div class="tool-section">
                 <h2>
                     <span class="tool-icon">📊</span>
@@ -380,6 +437,39 @@
                     💡 Separa las notas con comas. Ejemplo: <strong>12, 14, 16, 18, 20</strong>
                 </div>
             </div>
+
+            <!-- DIVISOR -->
+            <div class="section-divider"></div>
+
+            <!-- STUDY AI -->
+            <div class="tool-section">
+                <h2>
+                    <span class="tool-icon">🤖</span>
+                    Study AI
+                </h2>
+
+                <div class="input-group">
+                    <label for="pregunta">¿En qué necesitas ayuda?</label>
+                    <textarea 
+                        id="pregunta" 
+                        placeholder="Ejemplo: ¿Cómo se resuelven ecuaciones de segundo grado? o Necesito consejos para estudiar francés"
+                        autocomplete="off"
+                    ></textarea>
+                    <div class="error-message" id="aiErrorMessage"></div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-ask" onclick="hacerPregunta()">Preguntar</button>
+                </div>
+
+                <div class="ai-response-box" id="aiResponseBox">
+                    <div class="ai-response-text" id="aiResponse"></div>
+                </div>
+
+                <div class="info-box">
+                    💡 Puedes preguntar sobre: matemáticas, francés, cómo mejorar tus notas, y más.
+                </div>
+            </div>
         </div>
     </div>
 
@@ -395,6 +485,7 @@
             }
         });
 
+        // CALCULADORA DE MEDIA
         function getPerformanceData(media) {
             if (media >= 16) {
                 return {
@@ -511,6 +602,106 @@
         function mostrarError(mensaje) {
             errorMessage.textContent = mensaje;
             errorMessage.classList.add('show');
+        }
+
+        // STUDY AI
+        const inputPregunta = document.getElementById('pregunta');
+        const aiResponseBox = document.getElementById('aiResponseBox');
+        const aiErrorMessage = document.getElementById('aiErrorMessage');
+
+        // Permitir enviar con Ctrl+Enter
+        inputPregunta.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                hacerPregunta();
+            }
+        });
+
+        function obtenerRespuestaIA(pregunta) {
+            const preguntaLower = pregunta.toLowerCase();
+
+            // Palabras clave para matemáticas
+            if (preguntaLower.includes('mate') || preguntaLower.includes('matemática') || 
+                preguntaLower.includes('ecuación') || preguntaLower.includes('álgebra') ||
+                preguntaLower.includes('geometría') || preguntaLower.includes('cálculo')) {
+                return `📐 <strong>Consejos para Matemáticas:</strong><br>
+                <br>
+                • <strong>Practica regularmente:</strong> Resuelve ejercicios diariamente, no solo antes de exámenes.<br>
+                • <strong>Entiende los conceptos:</strong> No memorices fórmulas, comprende por qué funcionan.<br>
+                • <strong>Organiza tus apuntes:</strong> Crea mapas conceptuales para visualizar relaciones.<br>
+                • <strong>Revisa errores:</strong> Cuando cometas un error, analiza dónde fallaste.<br>
+                • <strong>Busca patrones:</strong> Muchos problemas siguen estructuras similares.<br>
+                <br>
+                💡 Recuerda: Las matemáticas se aprenden haciendo, no leyendo. ¡Practica mucho!`;
+            }
+
+            // Palabras clave para francés
+            if (preguntaLower.includes('francés') || preguntaLower.includes('frances') ||
+                preguntaLower.includes('idioma') || preguntaLower.includes('lengua')) {
+                return `🇫🇷 <strong>Consejos para Estudiar Francés:</strong><br>
+                <br>
+                • <strong>Escucha activamente:</strong> Mira películas, series y escucha música en francés.<br>
+                • <strong>Practica la pronunciación:</strong> Habla en voz alta, aunque sea solo contigo.<br>
+                • <strong>Aprende por contexto:</strong> No memorizas palabras aisladas, úsalas en frases.<br>
+                • <strong>Haz ejercicios de escritura:</strong> Escribe diarios o cartas cortas.<br>
+                • <strong>Interactúa con nativos:</strong> Busca intercambios de idiomas o grupos en línea.<br>
+                • <strong>Repasa vocabulario:</strong> Usa flashcards para reforzar palabras clave.<br>
+                <br>
+                💡 La clave es la inmersión. Cuanto más expongas tu oído al francés, más rápido aprenderás.`;
+            }
+
+            // Palabras clave para mejorar notas/rendimiento
+            if (preguntaLower.includes('media') || preguntaLower.includes('nota') ||
+                preguntaLower.includes('rendimiento') || preguntaLower.includes('calificación') ||
+                preguntaLower.includes('mejorar') || preguntaLower.includes('aprobar')) {
+                return `📈 <strong>Cómo Mejorar tus Notas:</strong><br>
+                <br>
+                • <strong>Organiza tu tiempo:</strong> Crea un horario de estudio realista y cúmplelo.<br>
+                • <strong>Identifica tus debilidades:</strong> Usa la calculadora de media para analizarlas.<br>
+                • <strong>Estudia en bloques:</strong> 45-50 minutos de concentración + 10 minutos de descanso.<br>
+                • <strong>Prepárate para exámenes:</strong> Comienza con anticipación, no la noche anterior.<br>
+                • <strong>Busca ayuda cuando la necesites:</strong> Pregunta a tu profesor o compañeros.<br>
+                • <strong>Duerme bien:</strong> El descanso es fundamental para la memoria y concentración.<br>
+                • <strong>Mantén la motivación:</strong> Celebra pequeños avances y no te desanimes.<br>
+                <br>
+                💡 La consistencia es más importante que la intensidad. Pequeños esfuerzos diarios dan grandes resultados.`;
+            }
+
+            // Respuesta por defecto si no se reconoce
+            return `❓ <strong>No estoy seguro de tu pregunta.</strong><br>
+            <br>
+            Por favor, intenta reformularla. Puedo ayudarte con:<br>
+            • <strong>Matemáticas:</strong> ecuaciones, álgebra, geometría...<br>
+            • <strong>Francés:</strong> vocabulario, pronunciación, gramática...<br>
+            • <strong>Rendimiento académico:</strong> cómo mejorar tus notas y estudiar mejor.<br>
+            <br>
+            💡 Sé más específico en tu pregunta para obtener una mejor respuesta.`;
+        }
+
+        function hacerPregunta() {
+            aiErrorMessage.classList.remove('show');
+            aiResponseBox.classList.remove('show');
+
+            const pregunta = inputPregunta.value.trim();
+
+            if (!pregunta) {
+                mostrarErrorIA('Por favor, escribe tu pregunta o duda');
+                return;
+            }
+
+            try {
+                const respuesta = obtenerRespuestaIA(pregunta);
+                
+                document.getElementById('aiResponse').innerHTML = respuesta;
+                aiResponseBox.classList.add('show');
+
+            } catch (e) {
+                mostrarErrorIA('Error al procesar tu pregunta. Intenta de nuevo.');
+            }
+        }
+
+        function mostrarErrorIA(mensaje) {
+            aiErrorMessage.textContent = mensaje;
+            aiErrorMessage.classList.add('show');
         }
 
         // Enfocar en el input al cargar
