@@ -133,17 +133,22 @@
             letter-spacing: 0.5px;
         }
 
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .btn-calculate {
             background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
             color: #001a33;
         }
 
-        .btn-calculate:hover {
+        .btn-calculate:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(0, 212, 255, 0.4);
         }
 
-        .btn-calculate:active {
+        .btn-calculate:active:not(:disabled) {
             transform: translateY(0);
         }
 
@@ -164,12 +169,12 @@
             flex: 1;
         }
 
-        .btn-ask:hover {
+        .btn-ask:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(0, 212, 255, 0.4);
         }
 
-        .btn-ask:active {
+        .btn-ask:active:not(:disabled) {
             transform: translateY(0);
         }
 
@@ -322,6 +327,22 @@
             color: #c8e6ff;
         }
 
+        .loading-text {
+            font-size: 14px;
+            color: #a0a0a0;
+            font-style: italic;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+
         .error-message {
             color: #ff6b6b;
             font-size: 13px;
@@ -449,9 +470,9 @@
                 </h2>
 
                 <div class="input-group">
-                    <label for="pregunta">¿En qué necesitas ayuda?</label>
+                    <label for="input">¿En qué necesitas ayuda?</label>
                     <textarea 
-                        id="pregunta" 
+                        id="input" 
                         placeholder="Ejemplo: ¿Cómo se resuelven ecuaciones de segundo grado? o Necesito consejos para estudiar francés"
                         autocomplete="off"
                     ></textarea>
@@ -459,10 +480,10 @@
                 </div>
 
                 <div class="button-group">
-                    <button class="btn-ask" onclick="hacerPregunta()">Preguntar</button>
+                    <button class="btn-ask" id="preguntarBtn" onclick="preguntarIA()">Preguntar</button>
                 </div>
 
-                <div class="ai-response-box" id="aiResponseBox">
+                <div class="ai-response-box" id="respuesta">
                     <div class="ai-response-text" id="aiResponse"></div>
                 </div>
 
@@ -604,98 +625,68 @@
             errorMessage.classList.add('show');
         }
 
-        // STUDY AI
-        const inputPregunta = document.getElementById('pregunta');
-        const aiResponseBox = document.getElementById('aiResponseBox');
+        // STUDY AI CON IA REAL
+        const inputPregunta = document.getElementById('input');
+        const respuestaBox = document.getElementById('respuesta');
         const aiErrorMessage = document.getElementById('aiErrorMessage');
+        const preguntarBtn = document.getElementById('preguntarBtn');
 
         // Permitir enviar con Ctrl+Enter
         inputPregunta.addEventListener('keypress', function(e) {
             if (e.key === 'Enter' && e.ctrlKey) {
-                hacerPregunta();
+                preguntarIA();
             }
         });
 
-        function obtenerRespuestaIA(pregunta) {
-            const preguntaLower = pregunta.toLowerCase();
-
-            // Palabras clave para matemáticas
-            if (preguntaLower.includes('mate') || preguntaLower.includes('matemática') || 
-                preguntaLower.includes('ecuación') || preguntaLower.includes('álgebra') ||
-                preguntaLower.includes('geometría') || preguntaLower.includes('cálculo')) {
-                return `📐 <strong>Consejos para Matemáticas:</strong><br>
-                <br>
-                • <strong>Practica regularmente:</strong> Resuelve ejercicios diariamente, no solo antes de exámenes.<br>
-                • <strong>Entiende los conceptos:</strong> No memorices fórmulas, comprende por qué funcionan.<br>
-                • <strong>Organiza tus apuntes:</strong> Crea mapas conceptuales para visualizar relaciones.<br>
-                • <strong>Revisa errores:</strong> Cuando cometas un error, analiza dónde fallaste.<br>
-                • <strong>Busca patrones:</strong> Muchos problemas siguen estructuras similares.<br>
-                <br>
-                💡 Recuerda: Las matemáticas se aprenden haciendo, no leyendo. ¡Practica mucho!`;
-            }
-
-            // Palabras clave para francés
-            if (preguntaLower.includes('francés') || preguntaLower.includes('frances') ||
-                preguntaLower.includes('idioma') || preguntaLower.includes('lengua')) {
-                return `🇫🇷 <strong>Consejos para Estudiar Francés:</strong><br>
-                <br>
-                • <strong>Escucha activamente:</strong> Mira películas, series y escucha música en francés.<br>
-                • <strong>Practica la pronunciación:</strong> Habla en voz alta, aunque sea solo contigo.<br>
-                • <strong>Aprende por contexto:</strong> No memorizas palabras aisladas, úsalas en frases.<br>
-                • <strong>Haz ejercicios de escritura:</strong> Escribe diarios o cartas cortas.<br>
-                • <strong>Interactúa con nativos:</strong> Busca intercambios de idiomas o grupos en línea.<br>
-                • <strong>Repasa vocabulario:</strong> Usa flashcards para reforzar palabras clave.<br>
-                <br>
-                💡 La clave es la inmersión. Cuanto más expongas tu oído al francés, más rápido aprenderás.`;
-            }
-
-            // Palabras clave para mejorar notas/rendimiento
-            if (preguntaLower.includes('media') || preguntaLower.includes('nota') ||
-                preguntaLower.includes('rendimiento') || preguntaLower.includes('calificación') ||
-                preguntaLower.includes('mejorar') || preguntaLower.includes('aprobar')) {
-                return `📈 <strong>Cómo Mejorar tus Notas:</strong><br>
-                <br>
-                • <strong>Organiza tu tiempo:</strong> Crea un horario de estudio realista y cúmplelo.<br>
-                • <strong>Identifica tus debilidades:</strong> Usa la calculadora de media para analizarlas.<br>
-                • <strong>Estudia en bloques:</strong> 45-50 minutos de concentración + 10 minutos de descanso.<br>
-                • <strong>Prepárate para exámenes:</strong> Comienza con anticipación, no la noche anterior.<br>
-                • <strong>Busca ayuda cuando la necesites:</strong> Pregunta a tu profesor o compañeros.<br>
-                • <strong>Duerme bien:</strong> El descanso es fundamental para la memoria y concentración.<br>
-                • <strong>Mantén la motivación:</strong> Celebra pequeños avances y no te desanimes.<br>
-                <br>
-                💡 La consistencia es más importante que la intensidad. Pequeños esfuerzos diarios dan grandes resultados.`;
-            }
-
-            // Respuesta por defecto si no se reconoce
-            return `❓ <strong>No estoy seguro de tu pregunta.</strong><br>
-            <br>
-            Por favor, intenta reformularla. Puedo ayudarte con:<br>
-            • <strong>Matemáticas:</strong> ecuaciones, álgebra, geometría...<br>
-            • <strong>Francés:</strong> vocabulario, pronunciación, gramática...<br>
-            • <strong>Rendimiento académico:</strong> cómo mejorar tus notas y estudiar mejor.<br>
-            <br>
-            💡 Sé más específico en tu pregunta para obtener una mejor respuesta.`;
-        }
-
-        function hacerPregunta() {
+        async function preguntarIA() {
             aiErrorMessage.classList.remove('show');
-            aiResponseBox.classList.remove('show');
+            respuestaBox.classList.remove('show');
 
-            const pregunta = inputPregunta.value.trim();
+            const mensajeUsuario = inputPregunta.value.trim();
 
-            if (!pregunta) {
+            if (!mensajeUsuario) {
                 mostrarErrorIA('Por favor, escribe tu pregunta o duda');
                 return;
             }
 
             try {
-                const respuesta = obtenerRespuestaIA(pregunta);
-                
-                document.getElementById('aiResponse').innerHTML = respuesta;
-                aiResponseBox.classList.add('show');
+                // Mostrar "Pensando..." y desactivar botón
+                preguntarBtn.disabled = true;
+                respuestaBox.classList.add('show');
+                document.getElementById('aiResponse').innerHTML = '<span class="loading-text">🤔 Pensando...</span>';
 
-            } catch (e) {
-                mostrarErrorIA('Error al procesar tu pregunta. Intenta de nuevo.');
+                // Hacer la petición POST a /api/chat
+                const response = await fetch("/api/chat", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        message: mensajeUsuario
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+
+                const data = await response.json();
+
+                // Mostrar la respuesta
+                if (data.reply) {
+                    document.getElementById('aiResponse').innerHTML = data.reply;
+                } else {
+                    throw new Error('No se recibió respuesta');
+                }
+
+                respuestaBox.classList.add('show');
+
+            } catch (error) {
+                respuestaBox.classList.remove('show');
+                mostrarErrorIA('Error al conectar con la IA. Por favor, intenta de nuevo.');
+                console.error('Error:', error);
+            } finally {
+                preguntarBtn.disabled = false;
             }
         }
 
