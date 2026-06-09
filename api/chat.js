@@ -1,11 +1,11 @@
 export default async function handler(req, res) {
   try {
-    const { message } = req.body || {};
+    // 🔥 FORZAR JSON (esto arregla el 90% de casos en Vercel)
+    const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+    const message = body?.message;
 
     if (!message) {
-      return res.status(400).json({
-        reply: "No llegó ningún mensaje"
-      });
+      return res.status(400).json({ reply: "No llegó mensaje" });
     }
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -17,41 +17,28 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: "gpt-4o-mini",
         messages: [
-          {
-            role: "system",
-            content: "Eres un profesor que explica todo de forma simple para estudiantes."
-          },
-          {
-            role: "user",
-            content: message
-          }
+          { role: "system", content: "Eres un profesor que explica fácil." },
+          { role: "user", content: message }
         ]
       })
     });
 
     const data = await response.json();
 
-    // 👇 SI OpenAI falla, lo mostramos
     if (!response.ok) {
       return res.status(500).json({
         reply: data.error?.message || "Error en OpenAI"
       });
     }
 
-    const reply = data?.choices?.[0]?.message?.content;
-
-    if (!reply) {
-      return res.status(500).json({
-        reply: "La IA no devolvió respuesta"
-      });
-    }
-
-    res.status(200).json({ reply });
+    return res.status(200).json({
+      reply: data.choices?.[0]?.message?.content || "Sin respuesta"
+    });
 
   } catch (error) {
-    console.log(error);
+    console.log("ERROR:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       reply: "Error interno del servidor"
     });
   }
