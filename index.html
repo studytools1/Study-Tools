@@ -201,6 +201,81 @@
             flex: 1;
         }
 
+        .performance-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .performance-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .performance-badge.excellent {
+            background: rgba(0, 255, 100, 0.2);
+            color: #00ff64;
+            border: 1px solid rgba(0, 255, 100, 0.4);
+        }
+
+        .performance-badge.good {
+            background: rgba(100, 200, 255, 0.2);
+            color: #64c8ff;
+            border: 1px solid rgba(100, 200, 255, 0.4);
+        }
+
+        .performance-badge.fair {
+            background: rgba(255, 200, 100, 0.2);
+            color: #ffc864;
+            border: 1px solid rgba(255, 200, 100, 0.4);
+        }
+
+        .performance-badge.needs-improvement {
+            background: rgba(255, 150, 150, 0.2);
+            color: #ff9696;
+            border: 1px solid rgba(255, 150, 150, 0.4);
+        }
+
+        .performance-description {
+            font-size: 13px;
+            color: #a0a0a0;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .motivational-message {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 3px solid #00d4ff;
+            padding: 12px 15px;
+            border-radius: 5px;
+            font-size: 13px;
+            color: #e0e0e0;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .motivational-message.excellent {
+            border-left-color: #00ff64;
+        }
+
+        .motivational-message.good {
+            border-left-color: #64c8ff;
+        }
+
+        .motivational-message.fair {
+            border-left-color: #ffc864;
+        }
+
+        .motivational-message.needs-improvement {
+            border-left-color: #ff9696;
+        }
+
         .error-message {
             color: #ff6b6b;
             font-size: 13px;
@@ -293,6 +368,12 @@
                             <div id="notaMenor">0</div>
                         </div>
                     </div>
+
+                    <div class="performance-section">
+                        <div class="performance-badge" id="performanceBadge"></div>
+                        <div class="performance-description" id="performanceDescription"></div>
+                        <div class="motivational-message" id="motivationalMessage"></div>
+                    </div>
                 </div>
 
                 <div class="info-box">
@@ -313,6 +394,38 @@
                 calcularMedia();
             }
         });
+
+        function getPerformanceData(media) {
+            if (media >= 16) {
+                return {
+                    level: 'excellent',
+                    badge: '⭐ Excelente Rendimiento',
+                    description: 'Has demostrado un rendimiento excepcional. ¡Tus calificaciones están en el nivel más alto!',
+                    motivation: '🌟 ¡Felicidades! Estás dominando perfectamente estos temas. Sigue manteniendo este excelente desempeño y considera ayudar a otros compañeros.'
+                };
+            } else if (media >= 12) {
+                return {
+                    level: 'good',
+                    badge: '✅ Buen Trabajo',
+                    description: 'Tu rendimiento es sólido y estable. Estás en buen camino.',
+                    motivation: '💪 ¡Muy bien! Has mostrado un buen desempeño. Con un poco más de esfuerzo puedes alcanzar la excelencia.'
+                };
+            } else if (media >= 10) {
+                return {
+                    level: 'fair',
+                    badge: '📌 Justo Aprobado',
+                    description: 'Has aprobado, pero hay espacio para mejorar significativamente.',
+                    motivation: '🎯 No te desanimes. Cada paso forward cuenta. Identifica las áreas difíciles y dedica más tiempo a ellas. ¡Puedes hacerlo mejor!'
+                };
+            } else {
+                return {
+                    level: 'needs-improvement',
+                    badge: '📚 Necesita Mejorar',
+                    description: 'Requieres mayor dedicación y esfuerzo para mejorar tus calificaciones.',
+                    motivation: '🤝 Sabemos que puede ser desafiante, pero recuerda que el esfuerzo constante siempre trae resultados. Busca ayuda si la necesitas y no te rindas.'
+                };
+            }
+        }
 
         function calcularMedia() {
             errorMessage.classList.remove('show');
@@ -355,11 +468,27 @@
                 const mayor = Math.max(...notas);
                 const menor = Math.min(...notas);
 
+                // Obtener datos de rendimiento
+                const performanceData = getPerformanceData(media);
+
                 // Mostrar resultados
                 document.getElementById('mediaValue').textContent = media.toFixed(2);
                 document.getElementById('totalNotas').textContent = notas.length;
                 document.getElementById('notaMayor').textContent = mayor;
                 document.getElementById('notaMenor').textContent = menor;
+
+                // Mostrar datos de rendimiento
+                const badge = document.getElementById('performanceBadge');
+                const description = document.getElementById('performanceDescription');
+                const motivation = document.getElementById('motivationalMessage');
+
+                badge.textContent = performanceData.badge;
+                badge.className = `performance-badge ${performanceData.level}`;
+
+                description.textContent = performanceData.description;
+
+                motivation.textContent = performanceData.motivation;
+                motivation.className = `motivational-message ${performanceData.level}`;
 
                 resultBox.classList.add('show');
 
