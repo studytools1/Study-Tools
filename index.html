@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Tools - Calculadora de Notas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+            color: #00d4ff;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        }
+
+        .header p {
+            font-size: 14px;
+            color: #a0a0a0;
+            letter-spacing: 0.5px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .tool-section {
+            margin-bottom: 20px;
+        }
+
+        .tool-section h2 {
+            font-size: 18px;
+            color: #00d4ff;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tool-icon {
+            font-size: 24px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #b0b0b0;
+            font-size: 13px;
+            margin-bottom: 8px;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #00d4ff;
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+        }
+
+        input[type="text"]::placeholder {
+            color: #606060;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-calculate {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            color: #001a33;
+        }
+
+        .btn-calculate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn-calculate:active {
+            transform: translateY(0);
+        }
+
+        .btn-clear {
+            background: rgba(255, 255, 255, 0.08);
+            color: #a0a0a0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-clear:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+        }
+
+        .result-box {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 10px;
+            display: none;
+        }
+
+        .result-box.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-label {
+            color: #a0a0a0;
+            font-size: 12px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .result-value {
+            font-size: 36px;
+            color: #00d4ff;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        }
+
+        .result-details {
+            margin-top: 12px;
+            font-size: 13px;
+            color: #80b0c0;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .result-detail {
+            flex: 1;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.04);
+            border-left: 3px solid #00d4ff;
+            padding: 12px 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #a0a0a0;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+
+            .result-value {
+                font-size: 28px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Study Tools</h1>
+            <p>Herramientas de estudio</p>
+        </div>
+
+        <div class="card">
+            <div class="tool-section">
+                <h2>
+                    <span class="tool-icon">📊</span>
+                    Calculadora de Media
+                </h2>
+
+                <div class="input-group">
+                    <label for="notas">Ingresa tus notas</label>
+                    <input 
+                        type="text" 
+                        id="notas" 
+                        placeholder="Ejemplo: 12, 14, 16, 18, 20"
+                        autocomplete="off"
+                    >
+                    <div class="error-message" id="errorMessage"></div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-calculate" onclick="calcularMedia()">Calcular</button>
+                    <button class="btn-clear" onclick="limpiar()">Limpiar</button>
+                </div>
+
+                <div class="result-box" id="resultBox">
+                    <div class="result-label">Tu media es:</div>
+                    <div class="result-value" id="mediaValue">0.00</div>
+                    <div class="result-details">
+                        <div class="result-detail">
+                            <strong>Total notas:</strong>
+                            <div id="totalNotas">0</div>
+                        </div>
+                        <div class="result-detail">
+                            <strong>Mayor:</strong>
+                            <div id="notaMayor">0</div>
+                        </div>
+                        <div class="result-detail">
+                            <strong>Menor:</strong>
+                            <div id="notaMenor">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    💡 Separa las notas con comas. Ejemplo: <strong>12, 14, 16, 18, 20</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const inputNotas = document.getElementById('notas');
+        const resultBox = document.getElementById('resultBox');
+        const errorMessage = document.getElementById('errorMessage');
+
+        // Permitir calcular con Enter
+        inputNotas.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calcularMedia();
+            }
+        });
+
+        function calcularMedia() {
+            errorMessage.classList.remove('show');
+            resultBox.classList.remove('show');
+
+            const valor = inputNotas.value.trim();
+
+            if (!valor) {
+                mostrarError('Por favor, ingresa al menos una nota');
+                return;
+            }
+
+            try {
+                // Dividir por comas y convertir a números
+                const notas = valor
+                    .split(',')
+                    .map(n => {
+                        const num = parseFloat(n.trim());
+                        if (isNaN(num)) {
+                            throw new Error('formato');
+                        }
+                        return num;
+                    });
+
+                if (notas.length === 0) {
+                    mostrarError('Por favor, ingresa al menos una nota');
+                    return;
+                }
+
+                // Validar que las notas sean válidas (normalmente entre 0 y 20)
+                const notasValidas = notas.every(n => n >= 0 && n <= 20);
+                if (!notasValidas) {
+                    mostrarError('Las notas deben estar entre 0 y 20');
+                    return;
+                }
+
+                // Calcular media
+                const suma = notas.reduce((a, b) => a + b, 0);
+                const media = suma / notas.length;
+                const mayor = Math.max(...notas);
+                const menor = Math.min(...notas);
+
+                // Mostrar resultados
+                document.getElementById('mediaValue').textContent = media.toFixed(2);
+                document.getElementById('totalNotas').textContent = notas.length;
+                document.getElementById('notaMayor').textContent = mayor;
+                document.getElementById('notaMenor').textContent = menor;
+
+                resultBox.classList.add('show');
+
+            } catch (e) {
+                if (e.message === 'formato') {
+                    mostrarError('Formato inválido. Usa números separados por comas');
+                } else {
+                    mostrarError('Error al procesar las notas');
+                }
+            }
+        }
+
+        function limpiar() {
+            inputNotas.value = '';
+            resultBox.classList.remove('show');
+            errorMessage.classList.remove('show');
+            inputNotas.focus();
+        }
+
+        function mostrarError(mensaje) {
+            errorMessage.textContent = mensaje;
+            errorMessage.classList.add('show');
+        }
+
+        // Enfocar en el input al cargar
+        window.addEventListener('load', function() {
+            inputNotas.focus();
+        });
+    </script>
+</body>
+</html>
