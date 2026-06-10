@@ -519,7 +519,7 @@
                     <input 
                         type="text" 
                         id="notas" 
-                        placeholder="Exemple: 6, 7, 8, 9, 10"
+                        placeholder="Exemple: 65, 70, 80, 85, 90"
                         autocomplete="off"
                     >
                     <div class="error-message" id="errorMessage"></div>
@@ -556,7 +556,7 @@
                 </div>
 
                 <div class="info-box">
-                    💡 Séparez les notes avec des virgules. Exemple: <strong>6, 7, 8, 9, 10</strong>
+                    💡 Échelle 0-100. Séparez les notes avec des virgules. Exemple: <strong>65, 70, 80, 85, 90</strong>
                 </div>
             </div>
 
@@ -679,7 +679,7 @@
         }
 
         // ============================================
-        // CALCULATRICE DE MOYENNE
+        // CALCULATRICE DE MOYENNE - ÉCHELLE 0-100
         // ============================================
         const inputNotas = document.getElementById('notas');
         const resultBox = document.getElementById('resultBox');
@@ -692,21 +692,21 @@
         });
 
         function getPerformanceData(media) {
-            if (media >= 8) {
+            if (media >= 80) {
                 return {
                     level: 'excellent',
                     badge: '⭐ Excellent Rendement',
                     description: 'Vous avez démontré des performances exceptionnelles. Vos notes sont au plus haut niveau!',
                     motivation: '🌟 Félicitations! Vous maîtrisez parfaitement ces sujets. Continuez à maintenir cet excellent rendement et envisagez d\'aider d\'autres camarades.'
                 };
-            } else if (media >= 6) {
+            } else if (media >= 70) {
                 return {
                     level: 'good',
                     badge: '✅ Bon Travail',
                     description: 'Votre rendement est solide et stable. Vous êtes sur la bonne voie.',
                     motivation: '💪 Très bien! Vous avez montré une bonne performance. Avec un peu plus d\'effort, vous pouvez atteindre l\'excellence.'
                 };
-            } else if (media >= 5) {
+            } else if (media >= 60) {
                 return {
                     level: 'fair',
                     badge: '📌 Juste Passable',
@@ -718,7 +718,7 @@
                     level: 'needs-improvement',
                     badge: '📚 Besoin d\'Amélioration',
                     description: 'Vous nécessitez plus de dévouement et d\'effort pour améliorer vos notes.',
-                    motivation: '🤝 Nous savons que cela peut être difficile, mais rappelez-vous que l\'effort constant apporte toujours des résultats. Demandez de l\'aide si vous en avez besoin et ne renoncez pas.'
+                    motivation: '🤝 Nous savons que cela peut être difficile, mais rappelez-vous que l\'effort constant apporte toujours des résultats. Demandez de l\'aide si vous en avez besoin!'
                 };
             }
         }
@@ -750,9 +750,9 @@
                     return;
                 }
 
-                const notasValidas = notas.every(n => n >= 0 && n <= 10);
+                const notasValidas = notas.every(n => n >= 0 && n <= 100);
                 if (!notasValidas) {
-                    mostrarError('Les notes doivent être entre 0 et 10');
+                    mostrarError('Les notes doivent être entre 0 et 100');
                     return;
                 }
 
