@@ -415,29 +415,41 @@
             animation: slideIn 0.3s ease;
         }
 
-        .comparison-item {
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
             margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
         }
 
-        .comparison-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
+        .comparison-item {
+            padding: 15px;
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 8px;
+            text-align: center;
         }
 
         .comparison-label {
             color: #a0a0a0;
-            font-size: 12px;
+            font-size: 11px;
             text-transform: uppercase;
             margin-bottom: 8px;
+            letter-spacing: 0.5px;
         }
 
         .comparison-value {
             font-size: 24px;
             color: #00d4ff;
             font-weight: 700;
+        }
+
+        .comparison-summary {
+            padding: 15px;
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 8px;
+            margin-top: 15px;
         }
 
         .trend-up {
@@ -450,6 +462,14 @@
 
         .trend-stable {
             color: #ffc864;
+        }
+
+        .aprobado {
+            color: #00ff64;
+        }
+
+        .desaprobado {
+            color: #ff6b6b;
         }
 
         @media (max-width: 480px) {
@@ -484,6 +504,10 @@
             .menu-btn {
                 padding: 8px 12px;
                 font-size: 12px;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -589,7 +613,7 @@
                 </div>
             </div>
 
-            <!-- COMPARADOR DE NOTAS -->
+            <!-- COMPARADOR DE NOTAS (4 PERIODOS) -->
             <div class="tool-section" id="comparador">
                 <h2>
                     <span class="tool-icon">📈</span>
@@ -597,21 +621,41 @@
                 </h2>
 
                 <div class="period-group">
-                    <label>Período 1 (Notas anteriores)</label>
+                    <label>Período 1</label>
                     <input 
                         type="text" 
                         id="periodo1" 
-                        placeholder="Ejemplo: 5, 6, 7, 8"
+                        placeholder="Ejemplo: 65, 70, 75"
                         autocomplete="off"
                     >
                 </div>
 
                 <div class="period-group">
-                    <label>Período 2 (Notas actuales)</label>
+                    <label>Período 2</label>
                     <input 
                         type="text" 
                         id="periodo2" 
-                        placeholder="Ejemplo: 7, 8, 8, 9"
+                        placeholder="Ejemplo: 70, 75, 80"
+                        autocomplete="off"
+                    >
+                </div>
+
+                <div class="period-group">
+                    <label>Período 3</label>
+                    <input 
+                        type="text" 
+                        id="periodo3" 
+                        placeholder="Ejemplo: 75, 78, 82"
+                        autocomplete="off"
+                    >
+                </div>
+
+                <div class="period-group">
+                    <label>Período 4</label>
+                    <input 
+                        type="text" 
+                        id="periodo4" 
+                        placeholder="Ejemplo: 80, 82, 85"
                         autocomplete="off"
                     >
                 </div>
@@ -624,26 +668,38 @@
                 </div>
 
                 <div class="comparison-result" id="comparisonResult">
-                    <div class="comparison-item">
-                        <div class="comparison-label">Media Período 1:</div>
-                        <div class="comparison-value" id="media1">0.00</div>
+                    <div class="comparison-grid">
+                        <div class="comparison-item">
+                            <div class="comparison-label">P1 Media:</div>
+                            <div class="comparison-value" id="media1">0.00</div>
+                            <div class="comparison-label" id="estado1" style="color: #ffc864; margin-top: 8px;">-</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-label">P2 Media:</div>
+                            <div class="comparison-value" id="media2">0.00</div>
+                            <div class="comparison-label" id="estado2" style="color: #ffc864; margin-top: 8px;">-</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-label">P3 Media:</div>
+                            <div class="comparison-value" id="media3">0.00</div>
+                            <div class="comparison-label" id="estado3" style="color: #ffc864; margin-top: 8px;">-</div>
+                        </div>
+                        <div class="comparison-item">
+                            <div class="comparison-label">P4 Media:</div>
+                            <div class="comparison-value" id="media4">0.00</div>
+                            <div class="comparison-label" id="estado4" style="color: #ffc864; margin-top: 8px;">-</div>
+                        </div>
                     </div>
-                    <div class="comparison-item">
-                        <div class="comparison-label">Media Período 2:</div>
-                        <div class="comparison-value" id="media2">0.00</div>
-                    </div>
-                    <div class="comparison-item">
-                        <div class="comparison-label">Diferencia:</div>
-                        <div class="comparison-value" id="diferencia">0.00</div>
-                    </div>
-                    <div class="comparison-item">
-                        <div class="comparison-label">Tendencia:</div>
-                        <div class="comparison-value" id="tendencia">-</div>
+
+                    <div class="comparison-summary">
+                        <div class="comparison-label">Progreso General:</div>
+                        <div class="comparison-value" id="tendencia" style="margin-top: 8px;">-</div>
+                        <div class="comparison-label" id="detalleProgreso" style="margin-top: 12px; color: #c8e6ff;">-</div>
                     </div>
                 </div>
 
                 <div class="info-box">
-                    💡 Compara tu rendimiento entre dos períodos de tiempo.
+                    💡 Escala 0-100. Nota: Superior a 60 = Aprobado | Inferior a 60 = Reprobado
                 </div>
             </div>
         </div>
@@ -891,12 +947,22 @@
         }
 
         // ============================================
-        // COMPARADOR DE NOTAS
+        // COMPARADOR DE NOTAS (4 PERIODOS) - ESCALA 0-100
         // ============================================
         const periodo1 = document.getElementById('periodo1');
         const periodo2 = document.getElementById('periodo2');
+        const periodo3 = document.getElementById('periodo3');
+        const periodo4 = document.getElementById('periodo4');
         const comparisonResult = document.getElementById('comparisonResult');
         const errorComparador = document.getElementById('errorComparador');
+
+        function getEstadoNotas(media) {
+            if (media >= 60) {
+                return { text: '✅ Aprobado', class: 'aprobado' };
+            } else {
+                return { text: '❌ Reprobado', class: 'desaprobado' };
+            }
+        }
 
         function compararNotas() {
             errorComparador.classList.remove('show');
@@ -904,9 +970,11 @@
 
             const valor1 = periodo1.value.trim();
             const valor2 = periodo2.value.trim();
+            const valor3 = periodo3.value.trim();
+            const valor4 = periodo4.value.trim();
 
-            if (!valor1 || !valor2) {
-                mostrarErrorComparador('Por favor, completa ambos períodos');
+            if (!valor1 || !valor2 || !valor3 || !valor4) {
+                mostrarErrorComparador('Por favor, completa los 4 períodos');
                 return;
             }
 
@@ -923,39 +991,97 @@
                     return num;
                 });
 
-                // Validar rango
-                if (!notas1.every(n => n >= 0 && n <= 10) || !notas2.every(n => n >= 0 && n <= 10)) {
-                    mostrarErrorComparador('Las notas deben estar entre 0 y 10');
+                const notas3 = valor3.split(',').map(n => {
+                    const num = parseFloat(n.trim());
+                    if (isNaN(num)) throw new Error('formato');
+                    return num;
+                });
+
+                const notas4 = valor4.split(',').map(n => {
+                    const num = parseFloat(n.trim());
+                    if (isNaN(num)) throw new Error('formato');
+                    return num;
+                });
+
+                // Validar rango 0-100
+                const validar = (notas) => notas.every(n => n >= 0 && n <= 100);
+                if (!validar(notas1) || !validar(notas2) || !validar(notas3) || !validar(notas4)) {
+                    mostrarErrorComparador('Las notas deben estar entre 0 y 100');
                     return;
                 }
 
                 const media1 = notas1.reduce((a, b) => a + b, 0) / notas1.length;
                 const media2 = notas2.reduce((a, b) => a + b, 0) / notas2.length;
-                const diferencia = media2 - media1;
+                const media3 = notas3.reduce((a, b) => a + b, 0) / notas3.length;
+                const media4 = notas4.reduce((a, b) => a + b, 0) / notas4.length;
 
-                // Determinar tendencia
+                // Obtener estado de cada período
+                const estado1 = getEstadoNotas(media1);
+                const estado2 = getEstadoNotas(media2);
+                const estado3 = getEstadoNotas(media3);
+                const estado4 = getEstadoNotas(media4);
+
+                // Mostrar medias
+                document.getElementById('media1').textContent = media1.toFixed(2);
+                document.getElementById('media2').textContent = media2.toFixed(2);
+                document.getElementById('media3').textContent = media3.toFixed(2);
+                document.getElementById('media4').textContent = media4.toFixed(2);
+
+                // Mostrar estado
+                const est1 = document.getElementById('estado1');
+                const est2 = document.getElementById('estado2');
+                const est3 = document.getElementById('estado3');
+                const est4 = document.getElementById('estado4');
+
+                est1.textContent = estado1.text;
+                est1.className = `comparison-label ${estado1.class}`;
+                
+                est2.textContent = estado2.text;
+                est2.className = `comparison-label ${estado2.class}`;
+                
+                est3.textContent = estado3.text;
+                est3.className = `comparison-label ${estado3.class}`;
+                
+                est4.textContent = estado4.text;
+                est4.className = `comparison-label ${estado4.class}`;
+
+                // Calcular tendencia general
+                const promedioPeriodos = (media1 + media2 + media3 + media4) / 4;
+                const diferencia = media4 - media1;
+
                 let tendencia = '';
                 let trendiconClass = '';
+                let detalle = '';
 
-                if (diferencia > 0.5) {
+                if (diferencia > 5) {
+                    tendencia = '📈 Mejorando Mucho';
+                    trendiconClass = 'trend-up';
+                    detalle = `Excelente progreso: +${diferencia.toFixed(2)} puntos`;
+                } else if (diferencia > 0) {
                     tendencia = '📈 Mejorando';
                     trendiconClass = 'trend-up';
-                } else if (diferencia < -0.5) {
+                    detalle = `Buen progreso: +${diferencia.toFixed(2)} puntos`;
+                } else if (diferencia < -5) {
+                    tendencia = '📉 Empeorando Mucho';
+                    trendiconClass = 'trend-down';
+                    detalle = `Necesitas enfocarte: ${diferencia.toFixed(2)} puntos`;
+                } else if (diferencia < 0) {
                     tendencia = '📉 Empeorando';
                     trendiconClass = 'trend-down';
+                    detalle = `Pequena caida: ${diferencia.toFixed(2)} puntos`;
                 } else {
                     tendencia = '➡️ Estable';
                     trendiconClass = 'trend-stable';
+                    detalle = 'Notas sin cambios significativos';
                 }
 
-                document.getElementById('media1').textContent = media1.toFixed(2);
-                document.getElementById('media2').textContent = media2.toFixed(2);
-                document.getElementById('diferencia').textContent = (diferencia > 0 ? '+' : '') + diferencia.toFixed(2);
-                document.getElementById('diferencia').className = 'comparison-value ' + trendiconClass;
-                
                 const tendenciaEl = document.getElementById('tendencia');
                 tendenciaEl.textContent = tendencia;
                 tendenciaEl.className = 'comparison-value ' + trendiconClass;
+
+                const detalleEl = document.getElementById('detalleProgreso');
+                detalleEl.textContent = detalle + ' | Promedio: ' + promedioPeriodos.toFixed(2);
+                detalleEl.className = 'comparison-label';
 
                 comparisonResult.classList.add('show');
 
@@ -967,6 +1093,8 @@
         function limpiarComparador() {
             periodo1.value = '';
             periodo2.value = '';
+            periodo3.value = '';
+            periodo4.value = '';
             comparisonResult.classList.remove('show');
             errorComparador.classList.remove('show');
             periodo1.focus();
