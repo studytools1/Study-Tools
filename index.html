@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study Tools - Herramientas de Estudio</title>
+    <title>Study Tools - Outils d'Étude</title>
     <style>
         * {
             margin: 0;
@@ -350,44 +350,7 @@
             line-height: 1.6;
         }
 
-        /* RESUMEN AI */
-        .summary-result {
-            margin-top: 20px;
-            padding: 20px;
-            background: rgba(0, 212, 255, 0.1);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            border-radius: 10px;
-            display: none;
-        }
-
-        .summary-result.show {
-            display: block;
-            animation: slideIn 0.3s ease;
-        }
-
-        .summary-text {
-            color: #e0e0e0;
-            line-height: 1.8;
-            font-size: 14px;
-        }
-
-        .keywords-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 15px;
-        }
-
-        .keyword-tag {
-            background: rgba(0, 212, 255, 0.2);
-            color: #00d4ff;
-            padding: 6px 12px;
-            border-radius: 15px;
-            font-size: 12px;
-            border: 1px solid rgba(0, 212, 255, 0.4);
-        }
-
-        /* COMPARADOR DE NOTAS */
+        /* COMPARATEUR DE NOTES */
         .period-group {
             background: rgba(255, 255, 255, 0.03);
             padding: 15px;
@@ -534,54 +497,53 @@
     <div class="container">
         <div class="header">
             <h1>📚 Study Tools</h1>
-            <p>Herramientas de estudio</p>
+            <p>Outils d'étude</p>
         </div>
 
         <!-- MENU -->
         <div class="menu-tabs">
-            <button class="menu-btn active" onclick="switchTool('media')">📊 Media</button>
-            <button class="menu-btn" onclick="switchTool('resumen')">📝 Resumen</button>
-            <button class="menu-btn" onclick="switchTool('comparador')">📈 Comparador</button>
+            <button class="menu-btn active" onclick="switchTool('media')">📊 Moyenne</button>
+            <button class="menu-btn" onclick="switchTool('comparador')">📈 Comparateur</button>
         </div>
 
         <div class="card">
-            <!-- CALCULADORA DE MEDIA -->
+            <!-- CALCULATRICE DE MOYENNE -->
             <div class="tool-section active" id="media">
                 <h2>
                     <span class="tool-icon">📊</span>
-                    Calculadora de Media
+                    Calculatrice de Moyenne
                 </h2>
 
                 <div class="input-group">
-                    <label for="notas">Ingresa tus notas</label>
+                    <label for="notas">Entrez vos notes</label>
                     <input 
                         type="text" 
                         id="notas" 
-                        placeholder="Ejemplo: 6, 7, 8, 9, 10"
+                        placeholder="Exemple: 6, 7, 8, 9, 10"
                         autocomplete="off"
                     >
                     <div class="error-message" id="errorMessage"></div>
                 </div>
 
                 <div class="button-group">
-                    <button class="btn-calculate" onclick="calcularMedia()">Calcular</button>
-                    <button class="btn-clear" onclick="limpiar()">Limpiar</button>
+                    <button class="btn-calculate" onclick="calcularMedia()">Calculer</button>
+                    <button class="btn-clear" onclick="limpiar()">Effacer</button>
                 </div>
 
                 <div class="result-box" id="resultBox">
-                    <div class="result-label">Tu media es:</div>
+                    <div class="result-label">Votre moyenne est:</div>
                     <div class="result-value" id="mediaValue">0.00</div>
                     <div class="result-details">
                         <div class="result-detail">
-                            <strong>Total notas:</strong>
+                            <strong>Total notes:</strong>
                             <div id="totalNotas">0</div>
                         </div>
                         <div class="result-detail">
-                            <strong>Mayor:</strong>
+                            <strong>Maximum:</strong>
                             <div id="notaMayor">0</div>
                         </div>
                         <div class="result-detail">
-                            <strong>Menor:</strong>
+                            <strong>Minimum:</strong>
                             <div id="notaMenor">0</div>
                         </div>
                     </div>
@@ -594,86 +556,53 @@
                 </div>
 
                 <div class="info-box">
-                    💡 Separa las notas con comas. Ejemplo: <strong>6, 7, 8, 9, 10</strong>
+                    💡 Séparez les notes avec des virgules. Exemple: <strong>6, 7, 8, 9, 10</strong>
                 </div>
             </div>
 
-            <!-- GENERADOR DE RESUMEN -->
-            <div class="tool-section" id="resumen">
-                <h2>
-                    <span class="tool-icon">📝</span>
-                    Generador de Resumen
-                </h2>
-
-                <div class="input-group">
-                    <label for="textoResumen">Pega el texto a resumir</label>
-                    <textarea 
-                        id="textoResumen" 
-                        placeholder="Pega aquí el texto que deseas resumir..."
-                        autocomplete="off"
-                    ></textarea>
-                    <div class="error-message" id="errorResumen"></div>
-                </div>
-
-                <div class="button-group">
-                    <button class="btn-calculate" onclick="generarResumen()">Resumir</button>
-                    <button class="btn-clear" onclick="limpiarResumen()">Limpiar</button>
-                </div>
-
-                <div class="summary-result" id="summaryResult">
-                    <div class="result-label">Puntos Clave:</div>
-                    <div class="summary-text" id="summaryText"></div>
-                    <div class="keywords-list" id="keywordsList"></div>
-                </div>
-
-                <div class="info-box">
-                    💡 Extrae automáticamente los puntos clave del texto ingresado.
-                </div>
-            </div>
-
-            <!-- COMPARADOR DE NOTAS (4 PERIODOS) -->
+            <!-- COMPARATEUR DE NOTES (4 PERIODES) -->
             <div class="tool-section" id="comparador">
                 <h2>
                     <span class="tool-icon">📈</span>
-                    Comparador de Notas
+                    Comparateur de Notes
                 </h2>
 
                 <div class="period-group">
-                    <label>Período 1</label>
+                    <label>Période 1</label>
                     <input 
                         type="text" 
                         id="periodo1" 
-                        placeholder="Ejemplo: 65, 70, 75"
+                        placeholder="Exemple: 65, 70, 75"
                         autocomplete="off"
                     >
                 </div>
 
                 <div class="period-group">
-                    <label>Período 2</label>
+                    <label>Période 2</label>
                     <input 
                         type="text" 
                         id="periodo2" 
-                        placeholder="Ejemplo: 70, 75, 80"
+                        placeholder="Exemple: 70, 75, 80"
                         autocomplete="off"
                     >
                 </div>
 
                 <div class="period-group">
-                    <label>Período 3</label>
+                    <label>Période 3</label>
                     <input 
                         type="text" 
                         id="periodo3" 
-                        placeholder="Ejemplo: 75, 78, 82"
+                        placeholder="Exemple: 75, 78, 82"
                         autocomplete="off"
                     >
                 </div>
 
                 <div class="period-group">
-                    <label>Período 4</label>
+                    <label>Période 4</label>
                     <input 
                         type="text" 
                         id="periodo4" 
-                        placeholder="Ejemplo: 80, 82, 85"
+                        placeholder="Exemple: 80, 82, 85"
                         autocomplete="off"
                     >
                 </div>
@@ -681,68 +610,68 @@
                 <div class="error-message" id="errorComparador"></div>
 
                 <div class="button-group">
-                    <button class="btn-calculate" onclick="compararNotas()">Comparar</button>
-                    <button class="btn-clear" onclick="limpiarComparador()">Limpiar</button>
+                    <button class="btn-calculate" onclick="compararNotas()">Comparer</button>
+                    <button class="btn-clear" onclick="limpiarComparador()">Effacer</button>
                 </div>
 
                 <div class="comparison-result" id="comparisonResult">
                     <div class="comparison-grid">
                         <div class="comparison-item">
-                            <div class="comparison-label">P1 Media:</div>
+                            <div class="comparison-label">P1 Moyenne:</div>
                             <div class="comparison-value" id="media1">0.00</div>
                             <div class="comparison-label" id="estado1" style="color: #ffc864; margin-top: 8px;">-</div>
                         </div>
                         <div class="comparison-item">
-                            <div class="comparison-label">P2 Media:</div>
+                            <div class="comparison-label">P2 Moyenne:</div>
                             <div class="comparison-value" id="media2">0.00</div>
                             <div class="comparison-label" id="estado2" style="color: #ffc864; margin-top: 8px;">-</div>
                         </div>
                         <div class="comparison-item">
-                            <div class="comparison-label">P3 Media:</div>
+                            <div class="comparison-label">P3 Moyenne:</div>
                             <div class="comparison-value" id="media3">0.00</div>
                             <div class="comparison-label" id="estado3" style="color: #ffc864; margin-top: 8px;">-</div>
                         </div>
                         <div class="comparison-item">
-                            <div class="comparison-label">P4 Media:</div>
+                            <div class="comparison-label">P4 Moyenne:</div>
                             <div class="comparison-value" id="media4">0.00</div>
                             <div class="comparison-label" id="estado4" style="color: #ffc864; margin-top: 8px;">-</div>
                         </div>
                     </div>
 
                     <div class="comparison-summary">
-                        <div class="comparison-label">Progreso General:</div>
+                        <div class="comparison-label">Progression Générale:</div>
                         <div class="comparison-value" id="tendencia" style="margin-top: 8px;">-</div>
                         <div class="comparison-label" id="detalleProgreso" style="margin-top: 12px; color: #c8e6ff;">-</div>
                     </div>
 
-                    <!-- NUEVA SECCIÓN: PROMEDIO FINAL Y EXAMEN FINAL -->
+                    <!-- SECTION: MOYENNE FINALE ET EXAMEN FINAL -->
                     <div class="final-result-box" id="finalResultBox">
-                        <div class="comparison-label">Promedio Final (4 Períodos):</div>
+                        <div class="comparison-label">Moyenne Finale (4 Périodes):</div>
                         <div class="comparison-value" id="promedioFinal" style="margin-top: 8px;">0.00</div>
                         <div class="comparison-label" id="estadoExamen" style="margin-top: 12px; font-size: 13px; color: #c8e6ff;">-</div>
                     </div>
                 </div>
 
                 <div class="info-box">
-                    💡 Escala 0-100. Nota: Superior a 60 = Aprobado | Inferior a 60 = Reprobado <br><br>
-                    📌 Si el promedio de los 4 períodos es inferior a 60, deberás presentar examen final.
+                    💡 Échelle 0-100. Note: Supérieur à 60 = Réussi | Inférieur à 60 = Échoué <br><br>
+                    📌 Si la moyenne des 4 périodes est inférieure à 60, vous devrez passer l'examen final.
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // CAMBIAR HERRAMIENTAS
+        // CHANGER D'OUTILS
         function switchTool(tool) {
-            // Ocultar todas las secciones
+            // Masquer toutes les sections
             document.querySelectorAll('.tool-section').forEach(section => {
                 section.classList.remove('active');
             });
             
-            // Mostrar sección seleccionada
+            // Afficher la section sélectionnée
             document.getElementById(tool).classList.add('active');
             
-            // Actualizar botones del menú
+            // Mettre à jour les boutons du menu
             document.querySelectorAll('.menu-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
@@ -750,7 +679,7 @@
         }
 
         // ============================================
-        // CALCULADORA DE MEDIA
+        // CALCULATRICE DE MOYENNE
         // ============================================
         const inputNotas = document.getElementById('notas');
         const resultBox = document.getElementById('resultBox');
@@ -766,30 +695,30 @@
             if (media >= 8) {
                 return {
                     level: 'excellent',
-                    badge: '⭐ Excelente Rendimiento',
-                    description: 'Has demostrado un rendimiento excepcional. ¡Tus calificaciones están en el nivel más alto!',
-                    motivation: '🌟 ¡Felicidades! Estás dominando perfectamente estos temas. Sigue manteniendo este excelente desempeño y considera ayudar a otros compañeros.'
+                    badge: '⭐ Excellent Rendement',
+                    description: 'Vous avez démontré des performances exceptionnelles. Vos notes sont au plus haut niveau!',
+                    motivation: '🌟 Félicitations! Vous maîtrisez parfaitement ces sujets. Continuez à maintenir cet excellent rendement et envisagez d\'aider d\'autres camarades.'
                 };
             } else if (media >= 6) {
                 return {
                     level: 'good',
-                    badge: '✅ Buen Trabajo',
-                    description: 'Tu rendimiento es sólido y estable. Estás en buen camino.',
-                    motivation: '💪 ¡Muy bien! Has mostrado un buen desempeño. Con un poco más de esfuerzo puedes alcanzar la excelencia.'
+                    badge: '✅ Bon Travail',
+                    description: 'Votre rendement est solide et stable. Vous êtes sur la bonne voie.',
+                    motivation: '💪 Très bien! Vous avez montré une bonne performance. Avec un peu plus d\'effort, vous pouvez atteindre l\'excellence.'
                 };
             } else if (media >= 5) {
                 return {
                     level: 'fair',
-                    badge: '📌 Justo Aprobado',
-                    description: 'Has aprobado, pero hay espacio para mejorar significativamente.',
-                    motivation: '🎯 No te desanimes. Cada paso forward cuenta. Identifica las áreas difíciles y dedica más tiempo a ellas. ¡Puedes hacerlo mejor!'
+                    badge: '📌 Juste Passable',
+                    description: 'Vous avez réussi, mais il y a beaucoup de place pour vous améliorer.',
+                    motivation: '🎯 Ne soyez pas découragé. Chaque pas en avant compte. Identifiez les domaines difficiles et consacrez-y plus de temps. Vous pouvez faire mieux!'
                 };
             } else {
                 return {
                     level: 'needs-improvement',
-                    badge: '📚 Necesita Mejorar',
-                    description: 'Requieres mayor dedicación y esfuerzo para mejorar tus calificaciones.',
-                    motivation: '🤝 Sabemos que puede ser desafiante, pero recuerda que el esfuerzo constante siempre trae resultados. Busca ayuda si la necesitas y no te rindas.'
+                    badge: '📚 Besoin d\'Amélioration',
+                    description: 'Vous nécessitez plus de dévouement et d\'effort pour améliorer vos notes.',
+                    motivation: '🤝 Nous savons que cela peut être difficile, mais rappelez-vous que l\'effort constant apporte toujours des résultats. Demandez de l\'aide si vous en avez besoin et ne renoncez pas.'
                 };
             }
         }
@@ -801,7 +730,7 @@
             const valor = inputNotas.value.trim();
 
             if (!valor) {
-                mostrarError('Por favor, ingresa al menos una nota');
+                mostrarError('Veuillez entrer au moins une note');
                 return;
             }
 
@@ -817,13 +746,13 @@
                     });
 
                 if (notas.length === 0) {
-                    mostrarError('Por favor, ingresa al menos una nota');
+                    mostrarError('Veuillez entrer au moins une note');
                     return;
                 }
 
                 const notasValidas = notas.every(n => n >= 0 && n <= 10);
                 if (!notasValidas) {
-                    mostrarError('Las notas deben estar entre 0 y 10');
+                    mostrarError('Les notes doivent être entre 0 et 10');
                     return;
                 }
 
@@ -855,9 +784,9 @@
 
             } catch (e) {
                 if (e.message === 'formato') {
-                    mostrarError('Formato inválido. Usa números separados por comas');
+                    mostrarError('Format invalide. Utilisez des nombres séparés par des virgules');
                 } else {
-                    mostrarError('Error al procesar las notas');
+                    mostrarError('Erreur lors du traitement des notes');
                 }
             }
         }
@@ -875,105 +804,7 @@
         }
 
         // ============================================
-        // GENERADOR DE RESUMEN
-        // ============================================
-        const textoResumen = document.getElementById('textoResumen');
-        const summaryResult = document.getElementById('summaryResult');
-        const errorResumen = document.getElementById('errorResumen');
-
-        const keywords = {
-            'importante': ['importante', 'clave', 'esencial', 'fundamental', 'principal', 'crítico'],
-            'definición': ['definición', 'concepto', 'significa', 'es', 'se define', 'entendemos por'],
-            'causa': ['causas', 'causa', 'provoca', 'produce', 'origina', 'debido a'],
-            'efecto': ['efecto', 'resultado', 'consecuencia', 'resulta', 'genera'],
-            'proceso': ['proceso', 'procedimiento', 'pasos', 'etapas', 'fases', 'primero', 'segundo', 'luego'],
-            'conclusión': ['conclusión', 'resumen', 'finalmente', 'en conclusión', 'por lo tanto'],
-            'ejemplo': ['ejemplo', 'por ejemplo', 'como', 'tal como', 'ilustración']
-        };
-
-        function generarResumen() {
-            errorResumen.classList.remove('show');
-            summaryResult.classList.remove('show');
-
-            const texto = textoResumen.value.trim();
-
-            if (!texto) {
-                mostrarErrorResumen('Por favor, ingresa un texto para resumir');
-                return;
-            }
-
-            if (texto.length < 50) {
-                mostrarErrorResumen('El texto debe tener al menos 50 caracteres');
-                return;
-            }
-
-            try {
-                // Dividir en oraciones
-                const oraciones = texto.match(/[^.!?]+[.!?]+/g) || [texto];
-                const oracionesPrincipales = [];
-                const palabrasClave = new Set();
-
-                // Detectar oraciones importantes y palabras clave
-                oraciones.forEach(oracion => {
-                    const oracionLimpia = oracion.trim().toLowerCase();
-                    
-                    for (const [categoria, palabras] of Object.entries(keywords)) {
-                        const tieneKeyword = palabras.some(p => oracionLimpia.includes(p));
-                        if (tieneKeyword && oracionesPrincipales.length < 5) {
-                            oracionesPrincipales.push(oracion.trim());
-                            // Extraer palabras principales
-                            const palabrasOracion = oracion.trim().split(/\s+/);
-                            palabrasOracion.forEach(palabra => {
-                                if (palabra.length > 5 && !['ejemplo', 'también', 'porque'].includes(palabra.toLowerCase())) {
-                                    palabrasClave.add(palabra.replace(/[.,!?]/g, ''));
-                                }
-                            });
-                            break;
-                        }
-                    }
-                });
-
-                // Si no hay suficientes oraciones importantes, tomar las primeras
-                if (oracionesPrincipales.length < 3) {
-                    for (let i = 0; i < Math.min(3, oraciones.length); i++) {
-                        if (!oracionesPrincipales.includes(oraciones[i].trim())) {
-                            oracionesPrincipales.push(oraciones[i].trim());
-                        }
-                    }
-                }
-
-                // Mostrar resultado
-                let resumenTexto = '• ' + oracionesPrincipales.join('\n• ');
-                document.getElementById('summaryText').textContent = resumenTexto;
-
-                // Mostrar palabras clave
-                const keywordsHTML = Array.from(palabrasClave)
-                    .slice(0, 8)
-                    .map(palabra => `<span class="keyword-tag">${palabra}</span>`)
-                    .join('');
-                
-                document.getElementById('keywordsList').innerHTML = keywordsHTML;
-                summaryResult.classList.add('show');
-
-            } catch (e) {
-                mostrarErrorResumen('Error al procesar el texto');
-            }
-        }
-
-        function limpiarResumen() {
-            textoResumen.value = '';
-            summaryResult.classList.remove('show');
-            errorResumen.classList.remove('show');
-            textoResumen.focus();
-        }
-
-        function mostrarErrorResumen(mensaje) {
-            errorResumen.textContent = mensaje;
-            errorResumen.classList.add('show');
-        }
-
-        // ============================================
-        // COMPARADOR DE NOTAS (4 PERIODOS) - ESCALA 0-100
+        // COMPARATEUR DE NOTES (4 PERIODES) - ÉCHELLE 0-100
         // ============================================
         const periodo1 = document.getElementById('periodo1');
         const periodo2 = document.getElementById('periodo2');
@@ -985,9 +816,9 @@
 
         function getEstadoNotas(media) {
             if (media >= 60) {
-                return { text: '✅ Aprobado', class: 'aprobado' };
+                return { text: '✅ Réussi', class: 'aprobado' };
             } else {
-                return { text: '❌ Reprobado', class: 'desaprobado' };
+                return { text: '❌ Échoué', class: 'desaprobado' };
             }
         }
 
@@ -1001,7 +832,7 @@
             const valor4 = periodo4.value.trim();
 
             if (!valor1 || !valor2 || !valor3 || !valor4) {
-                mostrarErrorComparador('Por favor, completa los 4 períodos');
+                mostrarErrorComparador('Veuillez entrer les notes pour les 4 périodes');
                 return;
             }
 
@@ -1030,98 +861,85 @@
                     return num;
                 });
 
-                // Validar que todas estén en rango 0-100
-                const todasValidas = [notas1, notas2, notas3, notas4].every(notas =>
-                    notas.every(n => n >= 0 && n <= 100)
-                );
-
-                if (!todasValidas) {
-                    mostrarErrorComparador('Todas las notas deben estar entre 0 y 100');
-                    return;
-                }
-
-                // Calcular medias
+                // Calcular promedios por período
                 const media1 = notas1.reduce((a, b) => a + b, 0) / notas1.length;
                 const media2 = notas2.reduce((a, b) => a + b, 0) / notas2.length;
                 const media3 = notas3.reduce((a, b) => a + b, 0) / notas3.length;
                 const media4 = notas4.reduce((a, b) => a + b, 0) / notas4.length;
-
-                // NUEVA: Calcular promedio final de los 4 períodos
-                const promedioFinal = (media1 + media2 + media3 + media4) / 4;
-
-                // Calcular tendencias
-                const tendencias = [];
-                if (media2 > media1) tendencias.push('📈 P1→P2 Mejora');
-                else if (media2 < media1) tendencias.push('📉 P1→P2 Baja');
-                else tendencias.push('➡️ P1→P2 Estable');
-
-                if (media3 > media2) tendencias.push('📈 P2→P3 Mejora');
-                else if (media3 < media2) tendencias.push('📉 P2→P3 Baja');
-                else tendencias.push('➡️ P2→P3 Estable');
-
-                if (media4 > media3) tendencias.push('📈 P3→P4 Mejora');
-                else if (media4 < media3) tendencias.push('📉 P3→P4 Baja');
-                else tendencias.push('➡️ P3→P4 Estable');
-
-                // Actualizar UI
-                document.getElementById('media1').textContent = media1.toFixed(2);
-                document.getElementById('media2').textContent = media2.toFixed(2);
-                document.getElementById('media3').textContent = media3.toFixed(2);
-                document.getElementById('media4').textContent = media4.toFixed(2);
 
                 const estado1 = getEstadoNotas(media1);
                 const estado2 = getEstadoNotas(media2);
                 const estado3 = getEstadoNotas(media3);
                 const estado4 = getEstadoNotas(media4);
 
+                // Mostrar resultados
+                document.getElementById('media1').textContent = media1.toFixed(2);
+                document.getElementById('media2').textContent = media2.toFixed(2);
+                document.getElementById('media3').textContent = media3.toFixed(2);
+                document.getElementById('media4').textContent = media4.toFixed(2);
+
                 document.getElementById('estado1').textContent = estado1.text;
                 document.getElementById('estado1').className = `comparison-label ${estado1.class}`;
+                document.getElementById('estado1').style.marginTop = '8px';
 
                 document.getElementById('estado2').textContent = estado2.text;
                 document.getElementById('estado2').className = `comparison-label ${estado2.class}`;
+                document.getElementById('estado2').style.marginTop = '8px';
 
                 document.getElementById('estado3').textContent = estado3.text;
                 document.getElementById('estado3').className = `comparison-label ${estado3.class}`;
+                document.getElementById('estado3').style.marginTop = '8px';
 
                 document.getElementById('estado4').textContent = estado4.text;
                 document.getElementById('estado4').className = `comparison-label ${estado4.class}`;
+                document.getElementById('estado4').style.marginTop = '8px';
 
-                // Tendencia general
-                const tendenciaGeneral = media4 > media1 ? '📈 Tendencia: Mejora' : media4 < media1 ? '📉 Tendencia: Baja' : '➡️ Tendencia: Estable';
-                document.getElementById('tendencia').textContent = tendenciaGeneral;
-                document.getElementById('detalleProgreso').textContent = tendencias.join(' • ');
-
-                // NUEVA: Mostrar promedio final y necesidad de examen
+                // Calcular progreso
+                const promedioFinal = (media1 + media2 + media3 + media4) / 4;
                 document.getElementById('promedioFinal').textContent = promedioFinal.toFixed(2);
-                
-                const estadoExamenElement = document.getElementById('estadoExamen');
-                if (promedioFinal < 60) {
-                    estadoExamenElement.innerHTML = `
-                        <span style="color: #ff9696; font-weight: 600;">⚠️ NECESITA EXAMEN FINAL</span><br>
-                        <span style="color: #e0e0e0; font-size: 12px; margin-top: 8px; display: block;">
-                            Tu promedio es <strong>${promedioFinal.toFixed(2)}</strong>. 
-                            Necesitas presentar examen final para tener oportunidad de aprobar.
-                        </span>
-                    `;
-                    finalResultBox.className = 'final-result-box needs-exam';
+
+                // Determinar tendencia
+                let tendencia = '-';
+                let color = 'trend-stable';
+
+                if (media4 > media1) {
+                    tendencia = '📈 Amélioration';
+                    color = 'trend-up';
+                } else if (media4 < media1) {
+                    tendencia = '📉 Déclin';
+                    color = 'trend-down';
                 } else {
-                    estadoExamenElement.innerHTML = `
-                        <span style="color: #00ff64; font-weight: 600;">✅ NO NECESITA EXAMEN FINAL</span><br>
-                        <span style="color: #e0e0e0; font-size: 12px; margin-top: 8px; display: block;">
-                            ¡Felicidades! Tu promedio es <strong>${promedioFinal.toFixed(2)}</strong>. 
-                            ¡Has aprovechado satisfactoriamente!
-                        </span>
-                    `;
+                    tendencia = '➡️ Stable';
+                    color = 'trend-stable';
+                }
+
+                const tendenciaElement = document.getElementById('tendencia');
+                tendenciaElement.textContent = tendencia;
+                tendenciaElement.className = `comparison-value ${color}`;
+
+                // Detalles de progreso
+                const detalleProgreso = document.getElementById('detalleProgreso');
+                detalleProgreso.textContent = `P1: ${media1.toFixed(2)} → P4: ${media4.toFixed(2)}`;
+
+                // Estado del examen
+                const estadoExamen = document.getElementById('estadoExamen');
+                if (promedioFinal < 60) {
+                    finalResultBox.className = 'final-result-box needs-exam';
+                    estadoExamen.textContent = '⚠️ Vous devez passer l\'examen final';
+                    estadoExamen.style.color = '#ff9696';
+                } else {
                     finalResultBox.className = 'final-result-box no-exam';
+                    estadoExamen.textContent = '✅ Vous êtes exempté de l\'examen final';
+                    estadoExamen.style.color = '#00ff64';
                 }
 
                 comparisonResult.classList.add('show');
 
             } catch (e) {
                 if (e.message === 'formato') {
-                    mostrarErrorComparador('Formato inválido. Usa números separados por comas');
+                    mostrarErrorComparador('Format invalide. Utilisez des nombres séparés par des virgules');
                 } else {
-                    mostrarErrorComparador('Error al procesar los períodos');
+                    mostrarErrorComparador('Erreur lors du traitement des notes');
                 }
             }
         }
