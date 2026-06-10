@@ -418,7 +418,7 @@
                     <input 
                         type="text" 
                         id="notas" 
-                        placeholder="Ejemplo: 12, 14, 16, 18, 20"
+                        placeholder="Ejemplo: 6, 7, 8, 9, 10"
                         autocomplete="off"
                     >
                     <div class="error-message" id="errorMessage"></div>
@@ -455,7 +455,7 @@
                 </div>
 
                 <div class="info-box">
-                    💡 Separa las notas con comas. Ejemplo: <strong>12, 14, 16, 18, 20</strong>
+                    💡 Separa las notas con comas. Ejemplo: <strong>6, 7, 8, 9, 10</strong>
                 </div>
             </div>
 
@@ -508,21 +508,21 @@
 
         // CALCULADORA DE MEDIA
         function getPerformanceData(media) {
-            if (media >= 16) {
+            if (media >= 8) {
                 return {
                     level: 'excellent',
                     badge: '⭐ Excelente Rendimiento',
                     description: 'Has demostrado un rendimiento excepcional. ¡Tus calificaciones están en el nivel más alto!',
                     motivation: '🌟 ¡Felicidades! Estás dominando perfectamente estos temas. Sigue manteniendo este excelente desempeño y considera ayudar a otros compañeros.'
                 };
-            } else if (media >= 12) {
+            } else if (media >= 6) {
                 return {
                     level: 'good',
                     badge: '✅ Buen Trabajo',
                     description: 'Tu rendimiento es sólido y estable. Estás en buen camino.',
                     motivation: '💪 ¡Muy bien! Has mostrado un buen desempeño. Con un poco más de esfuerzo puedes alcanzar la excelencia.'
                 };
-            } else if (media >= 10) {
+            } else if (media >= 5) {
                 return {
                     level: 'fair',
                     badge: '📌 Justo Aprobado',
@@ -567,10 +567,10 @@
                     return;
                 }
 
-                // Validar que las notas sean válidas (normalmente entre 0 y 20)
-                const notasValidas = notas.every(n => n >= 0 && n <= 20);
+                // Validar que las notas sean válidas (entre 0 y 10)
+                const notasValidas = notas.every(n => n >= 0 && n <= 10);
                 if (!notasValidas) {
-                    mostrarError('Las notas deben estar entre 0 y 20');
+                    mostrarError('Las notas deben estar entre 0 y 10');
                     return;
                 }
 
