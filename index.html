@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Study Tools - Calculadora de Notas</title>
+    <title>Study Tools - Herramientas de Estudio</title>
     <style>
         * {
             margin: 0;
@@ -45,6 +45,39 @@
             letter-spacing: 0.5px;
         }
 
+        /* MENU STYLES */
+        .menu-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .menu-btn {
+            padding: 10px 20px;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            color: #a0a0a0;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+        }
+
+        .menu-btn:hover {
+            background: rgba(0, 212, 255, 0.1);
+            color: #00d4ff;
+        }
+
+        .menu-btn.active {
+            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+            color: #001a33;
+            border-color: #00d4ff;
+        }
+
         .card {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(0, 212, 255, 0.2);
@@ -55,7 +88,11 @@
         }
 
         .tool-section {
-            margin-bottom: 20px;
+            display: none;
+        }
+
+        .tool-section.active {
+            display: block;
         }
 
         .tool-section h2 {
@@ -163,21 +200,6 @@
             color: #ffffff;
         }
 
-        .btn-ask {
-            background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
-            color: #001a33;
-            flex: 1;
-        }
-
-        .btn-ask:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 212, 255, 0.4);
-        }
-
-        .btn-ask:active:not(:disabled) {
-            transform: translateY(0);
-        }
-
         .result-box {
             margin-top: 25px;
             padding: 20px;
@@ -188,20 +210,6 @@
         }
 
         .result-box.show {
-            display: block;
-            animation: slideIn 0.3s ease;
-        }
-
-        .ai-response-box {
-            margin-top: 20px;
-            padding: 20px;
-            background: rgba(0, 212, 255, 0.1);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            border-radius: 10px;
-            display: none;
-        }
-
-        .ai-response-box.show {
             display: block;
             animation: slideIn 0.3s ease;
         }
@@ -320,29 +328,6 @@
             border-left-color: #ff9696;
         }
 
-        .ai-response-text {
-            font-size: 14px;
-            color: #e0e0e0;
-            line-height: 1.8;
-            color: #c8e6ff;
-        }
-
-        .loading-text {
-            font-size: 14px;
-            color: #a0a0a0;
-            font-style: italic;
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.6;
-            }
-        }
-
         .error-message {
             color: #ff6b6b;
             font-size: 13px;
@@ -365,10 +350,106 @@
             line-height: 1.6;
         }
 
-        .section-divider {
-            height: 1px;
+        /* RESUMEN AI */
+        .summary-result {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 10px;
+            display: none;
+        }
+
+        .summary-result.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        .summary-text {
+            color: #e0e0e0;
+            line-height: 1.8;
+            font-size: 14px;
+        }
+
+        .keywords-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .keyword-tag {
             background: rgba(0, 212, 255, 0.2);
-            margin: 30px 0;
+            color: #00d4ff;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            border: 1px solid rgba(0, 212, 255, 0.4);
+        }
+
+        /* COMPARADOR DE NOTAS */
+        .period-group {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .period-group label {
+            font-weight: 600;
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+
+        .comparison-result {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 10px;
+            display: none;
+        }
+
+        .comparison-result.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        .comparison-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .comparison-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .comparison-label {
+            color: #a0a0a0;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .comparison-value {
+            font-size: 24px;
+            color: #00d4ff;
+            font-weight: 700;
+        }
+
+        .trend-up {
+            color: #00ff64;
+        }
+
+        .trend-down {
+            color: #ff6b6b;
+        }
+
+        .trend-stable {
+            color: #ffc864;
         }
 
         @media (max-width: 480px) {
@@ -395,6 +476,15 @@
             textarea {
                 min-height: 80px;
             }
+
+            .menu-tabs {
+                gap: 5px;
+            }
+
+            .menu-btn {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
         }
     </style>
 </head>
@@ -405,9 +495,16 @@
             <p>Herramientas de estudio</p>
         </div>
 
+        <!-- MENU -->
+        <div class="menu-tabs">
+            <button class="menu-btn active" onclick="switchTool('media')">📊 Media</button>
+            <button class="menu-btn" onclick="switchTool('resumen')">📝 Resumen</button>
+            <button class="menu-btn" onclick="switchTool('comparador')">📈 Comparador</button>
+        </div>
+
         <div class="card">
             <!-- CALCULADORA DE MEDIA -->
-            <div class="tool-section">
+            <div class="tool-section active" id="media">
                 <h2>
                     <span class="tool-icon">📊</span>
                     Calculadora de Media
@@ -459,54 +556,130 @@
                 </div>
             </div>
 
-            <!-- DIVISOR -->
-            <div class="section-divider"></div>
-
-            <!-- STUDY AI -->
-            <div class="tool-section">
+            <!-- GENERADOR DE RESUMEN -->
+            <div class="tool-section" id="resumen">
                 <h2>
-                    <span class="tool-icon">🤖</span>
-                    Study AI
+                    <span class="tool-icon">📝</span>
+                    Generador de Resumen
                 </h2>
 
                 <div class="input-group">
-                    <label for="input">¿En qué necesitas ayuda?</label>
+                    <label for="textoResumen">Pega el texto a resumir</label>
                     <textarea 
-                        id="input" 
-                        placeholder="Ejemplo: ¿Cómo se resuelven ecuaciones de segundo grado? o Necesito consejos para estudiar francés"
+                        id="textoResumen" 
+                        placeholder="Pega aquí el texto que deseas resumir..."
                         autocomplete="off"
                     ></textarea>
-                    <div class="error-message" id="aiErrorMessage"></div>
+                    <div class="error-message" id="errorResumen"></div>
                 </div>
 
                 <div class="button-group">
-                    <button class="btn-ask" id="preguntarBtn" onclick="preguntarIA()">Preguntar</button>
+                    <button class="btn-calculate" onclick="generarResumen()">Resumir</button>
+                    <button class="btn-clear" onclick="limpiarResumen()">Limpiar</button>
                 </div>
 
-                <div class="ai-response-box" id="respuesta">
-                    <div class="ai-response-text" id="aiResponse"></div>
+                <div class="summary-result" id="summaryResult">
+                    <div class="result-label">Puntos Clave:</div>
+                    <div class="summary-text" id="summaryText"></div>
+                    <div class="keywords-list" id="keywordsList"></div>
                 </div>
 
                 <div class="info-box">
-                    💡 Puedes preguntar sobre: matemáticas, francés, cómo mejorar tus notas, y más.
+                    💡 Extrae automáticamente los puntos clave del texto ingresado.
+                </div>
+            </div>
+
+            <!-- COMPARADOR DE NOTAS -->
+            <div class="tool-section" id="comparador">
+                <h2>
+                    <span class="tool-icon">📈</span>
+                    Comparador de Notas
+                </h2>
+
+                <div class="period-group">
+                    <label>Período 1 (Notas anteriores)</label>
+                    <input 
+                        type="text" 
+                        id="periodo1" 
+                        placeholder="Ejemplo: 5, 6, 7, 8"
+                        autocomplete="off"
+                    >
+                </div>
+
+                <div class="period-group">
+                    <label>Período 2 (Notas actuales)</label>
+                    <input 
+                        type="text" 
+                        id="periodo2" 
+                        placeholder="Ejemplo: 7, 8, 8, 9"
+                        autocomplete="off"
+                    >
+                </div>
+
+                <div class="error-message" id="errorComparador"></div>
+
+                <div class="button-group">
+                    <button class="btn-calculate" onclick="compararNotas()">Comparar</button>
+                    <button class="btn-clear" onclick="limpiarComparador()">Limpiar</button>
+                </div>
+
+                <div class="comparison-result" id="comparisonResult">
+                    <div class="comparison-item">
+                        <div class="comparison-label">Media Período 1:</div>
+                        <div class="comparison-value" id="media1">0.00</div>
+                    </div>
+                    <div class="comparison-item">
+                        <div class="comparison-label">Media Período 2:</div>
+                        <div class="comparison-value" id="media2">0.00</div>
+                    </div>
+                    <div class="comparison-item">
+                        <div class="comparison-label">Diferencia:</div>
+                        <div class="comparison-value" id="diferencia">0.00</div>
+                    </div>
+                    <div class="comparison-item">
+                        <div class="comparison-label">Tendencia:</div>
+                        <div class="comparison-value" id="tendencia">-</div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    💡 Compara tu rendimiento entre dos períodos de tiempo.
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // CAMBIAR HERRAMIENTAS
+        function switchTool(tool) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.tool-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Mostrar sección seleccionada
+            document.getElementById(tool).classList.add('active');
+            
+            // Actualizar botones del menú
+            document.querySelectorAll('.menu-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // ============================================
+        // CALCULADORA DE MEDIA
+        // ============================================
         const inputNotas = document.getElementById('notas');
         const resultBox = document.getElementById('resultBox');
         const errorMessage = document.getElementById('errorMessage');
 
-        // Permitir calcular con Enter
         inputNotas.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 calcularMedia();
             }
         });
 
-        // CALCULADORA DE MEDIA
         function getPerformanceData(media) {
             if (media >= 8) {
                 return {
@@ -551,7 +724,6 @@
             }
 
             try {
-                // Dividir por comas y convertir a números
                 const notas = valor
                     .split(',')
                     .map(n => {
@@ -567,29 +739,24 @@
                     return;
                 }
 
-                // Validar que las notas sean válidas (entre 0 y 10)
                 const notasValidas = notas.every(n => n >= 0 && n <= 10);
                 if (!notasValidas) {
                     mostrarError('Las notas deben estar entre 0 y 10');
                     return;
                 }
 
-                // Calcular media
                 const suma = notas.reduce((a, b) => a + b, 0);
                 const media = suma / notas.length;
                 const mayor = Math.max(...notas);
                 const menor = Math.min(...notas);
 
-                // Obtener datos de rendimiento
                 const performanceData = getPerformanceData(media);
 
-                // Mostrar resultados
                 document.getElementById('mediaValue').textContent = media.toFixed(2);
                 document.getElementById('totalNotas').textContent = notas.length;
                 document.getElementById('notaMayor').textContent = mayor;
                 document.getElementById('notaMenor').textContent = menor;
 
-                // Mostrar datos de rendimiento
                 const badge = document.getElementById('performanceBadge');
                 const description = document.getElementById('performanceDescription');
                 const motivation = document.getElementById('motivationalMessage');
@@ -625,77 +792,192 @@
             errorMessage.classList.add('show');
         }
 
-        // STUDY AI CON IA REAL
-        const inputPregunta = document.getElementById('input');
-        const respuestaBox = document.getElementById('respuesta');
-        const aiErrorMessage = document.getElementById('aiErrorMessage');
-        const preguntarBtn = document.getElementById('preguntarBtn');
+        // ============================================
+        // GENERADOR DE RESUMEN
+        // ============================================
+        const textoResumen = document.getElementById('textoResumen');
+        const summaryResult = document.getElementById('summaryResult');
+        const errorResumen = document.getElementById('errorResumen');
 
-        // Permitir enviar con Ctrl+Enter
-        inputPregunta.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && e.ctrlKey) {
-                preguntarIA();
+        const keywords = {
+            'importante': ['importante', 'clave', 'esencial', 'fundamental', 'principal', 'crítico'],
+            'definición': ['definición', 'concepto', 'significa', 'es', 'se define', 'entendemos por'],
+            'causa': ['causas', 'causa', 'provoca', 'produce', 'origina', 'debido a'],
+            'efecto': ['efecto', 'resultado', 'consecuencia', 'resulta', 'genera'],
+            'proceso': ['proceso', 'procedimiento', 'pasos', 'etapas', 'fases', 'primero', 'segundo', 'luego'],
+            'conclusión': ['conclusión', 'resumen', 'finalmente', 'en conclusión', 'por lo tanto'],
+            'ejemplo': ['ejemplo', 'por ejemplo', 'como', 'tal como', 'ilustración']
+        };
+
+        function generarResumen() {
+            errorResumen.classList.remove('show');
+            summaryResult.classList.remove('show');
+
+            const texto = textoResumen.value.trim();
+
+            if (!texto) {
+                mostrarErrorResumen('Por favor, ingresa un texto para resumir');
+                return;
             }
-        });
 
-        async function preguntarIA() {
-            aiErrorMessage.classList.remove('show');
-            respuestaBox.classList.remove('show');
-
-            const mensajeUsuario = inputPregunta.value.trim();
-
-            if (!mensajeUsuario) {
-                mostrarErrorIA('Por favor, escribe tu pregunta o duda');
+            if (texto.length < 50) {
+                mostrarErrorResumen('El texto debe tener al menos 50 caracteres');
                 return;
             }
 
             try {
-                // Mostrar "Pensando..." y desactivar botón
-                preguntarBtn.disabled = true;
-                respuestaBox.classList.add('show');
-                document.getElementById('aiResponse').innerHTML = '<span class="loading-text">🤔 Pensando...</span>';
+                // Dividir en oraciones
+                const oraciones = texto.match(/[^.!?]+[.!?]+/g) || [texto];
+                const oracionesPrincipales = [];
+                const palabrasClave = new Set();
 
-                // Hacer la petición POST a /api/chat
-                const response = await fetch("/api/chat", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        message: mensajeUsuario
-                    })
+                // Detectar oraciones importantes y palabras clave
+                oraciones.forEach(oracion => {
+                    const oracionLimpia = oracion.trim().toLowerCase();
+                    
+                    for (const [categoria, palabras] of Object.entries(keywords)) {
+                        const tieneKeyword = palabras.some(p => oracionLimpia.includes(p));
+                        if (tieneKeyword && oracionesPrincipales.length < 5) {
+                            oracionesPrincipales.push(oracion.trim());
+                            // Extraer palabras principales
+                            const palabrasOracion = oracion.trim().split(/\s+/);
+                            palabrasOracion.forEach(palabra => {
+                                if (palabra.length > 5 && !['ejemplo', 'también', 'porque'].includes(palabra.toLowerCase())) {
+                                    palabrasClave.add(palabra.replace(/[.,!?]/g, ''));
+                                }
+                            });
+                            break;
+                        }
+                    }
                 });
 
-                if (!response.ok) {
-                    throw new Error('Error en la respuesta del servidor');
+                // Si no hay suficientes oraciones importantes, tomar las primeras
+                if (oracionesPrincipales.length < 3) {
+                    for (let i = 0; i < Math.min(3, oraciones.length); i++) {
+                        if (!oracionesPrincipales.includes(oraciones[i].trim())) {
+                            oracionesPrincipales.push(oraciones[i].trim());
+                        }
+                    }
                 }
 
-                const data = await response.json();
+                // Mostrar resultado
+                let resumenTexto = '• ' + oracionesPrincipales.join('\n• ');
+                document.getElementById('summaryText').textContent = resumenTexto;
 
-                // Mostrar la respuesta
-                if (data.reply) {
-                    document.getElementById('aiResponse').innerHTML = data.reply;
-                } else {
-                    throw new Error('No se recibió respuesta');
-                }
+                // Mostrar palabras clave
+                const keywordsHTML = Array.from(palabrasClave)
+                    .slice(0, 8)
+                    .map(palabra => `<span class="keyword-tag">${palabra}</span>`)
+                    .join('');
+                
+                document.getElementById('keywordsList').innerHTML = keywordsHTML;
+                summaryResult.classList.add('show');
 
-                respuestaBox.classList.add('show');
-
-            } catch (error) {
-                respuestaBox.classList.remove('show');
-                mostrarErrorIA('Error al conectar con la IA. Por favor, intenta de nuevo.');
-                console.error('Error:', error);
-            } finally {
-                preguntarBtn.disabled = false;
+            } catch (e) {
+                mostrarErrorResumen('Error al procesar el texto');
             }
         }
 
-        function mostrarErrorIA(mensaje) {
-            aiErrorMessage.textContent = mensaje;
-            aiErrorMessage.classList.add('show');
+        function limpiarResumen() {
+            textoResumen.value = '';
+            summaryResult.classList.remove('show');
+            errorResumen.classList.remove('show');
+            textoResumen.focus();
         }
 
-        // Enfocar en el input al cargar
+        function mostrarErrorResumen(mensaje) {
+            errorResumen.textContent = mensaje;
+            errorResumen.classList.add('show');
+        }
+
+        // ============================================
+        // COMPARADOR DE NOTAS
+        // ============================================
+        const periodo1 = document.getElementById('periodo1');
+        const periodo2 = document.getElementById('periodo2');
+        const comparisonResult = document.getElementById('comparisonResult');
+        const errorComparador = document.getElementById('errorComparador');
+
+        function compararNotas() {
+            errorComparador.classList.remove('show');
+            comparisonResult.classList.remove('show');
+
+            const valor1 = periodo1.value.trim();
+            const valor2 = periodo2.value.trim();
+
+            if (!valor1 || !valor2) {
+                mostrarErrorComparador('Por favor, completa ambos períodos');
+                return;
+            }
+
+            try {
+                const notas1 = valor1.split(',').map(n => {
+                    const num = parseFloat(n.trim());
+                    if (isNaN(num)) throw new Error('formato');
+                    return num;
+                });
+
+                const notas2 = valor2.split(',').map(n => {
+                    const num = parseFloat(n.trim());
+                    if (isNaN(num)) throw new Error('formato');
+                    return num;
+                });
+
+                // Validar rango
+                if (!notas1.every(n => n >= 0 && n <= 10) || !notas2.every(n => n >= 0 && n <= 10)) {
+                    mostrarErrorComparador('Las notas deben estar entre 0 y 10');
+                    return;
+                }
+
+                const media1 = notas1.reduce((a, b) => a + b, 0) / notas1.length;
+                const media2 = notas2.reduce((a, b) => a + b, 0) / notas2.length;
+                const diferencia = media2 - media1;
+
+                // Determinar tendencia
+                let tendencia = '';
+                let trendiconClass = '';
+
+                if (diferencia > 0.5) {
+                    tendencia = '📈 Mejorando';
+                    trendiconClass = 'trend-up';
+                } else if (diferencia < -0.5) {
+                    tendencia = '📉 Empeorando';
+                    trendiconClass = 'trend-down';
+                } else {
+                    tendencia = '➡️ Estable';
+                    trendiconClass = 'trend-stable';
+                }
+
+                document.getElementById('media1').textContent = media1.toFixed(2);
+                document.getElementById('media2').textContent = media2.toFixed(2);
+                document.getElementById('diferencia').textContent = (diferencia > 0 ? '+' : '') + diferencia.toFixed(2);
+                document.getElementById('diferencia').className = 'comparison-value ' + trendiconClass;
+                
+                const tendenciaEl = document.getElementById('tendencia');
+                tendenciaEl.textContent = tendencia;
+                tendenciaEl.className = 'comparison-value ' + trendiconClass;
+
+                comparisonResult.classList.add('show');
+
+            } catch (e) {
+                mostrarErrorComparador('Formato inválido. Usa números separados por comas');
+            }
+        }
+
+        function limpiarComparador() {
+            periodo1.value = '';
+            periodo2.value = '';
+            comparisonResult.classList.remove('show');
+            errorComparador.classList.remove('show');
+            periodo1.focus();
+        }
+
+        function mostrarErrorComparador(mensaje) {
+            errorComparador.textContent = mensaje;
+            errorComparador.classList.add('show');
+        }
+
+        // Enfocar en el primer input al cargar
         window.addEventListener('load', function() {
             inputNotas.focus();
         });
