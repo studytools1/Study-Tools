@@ -452,6 +452,24 @@
             margin-top: 15px;
         }
 
+        .final-result-box {
+            padding: 15px;
+            background: rgba(0, 212, 255, 0.08);
+            border: 2px solid rgba(0, 212, 255, 0.4);
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .final-result-box.needs-exam {
+            background: rgba(255, 150, 150, 0.1);
+            border: 2px solid rgba(255, 150, 150, 0.4);
+        }
+
+        .final-result-box.no-exam {
+            background: rgba(0, 255, 100, 0.1);
+            border: 2px solid rgba(0, 255, 100, 0.4);
+        }
+
         .trend-up {
             color: #00ff64;
         }
@@ -696,10 +714,18 @@
                         <div class="comparison-value" id="tendencia" style="margin-top: 8px;">-</div>
                         <div class="comparison-label" id="detalleProgreso" style="margin-top: 12px; color: #c8e6ff;">-</div>
                     </div>
+
+                    <!-- NUEVA SECCIÓN: PROMEDIO FINAL Y EXAMEN FINAL -->
+                    <div class="final-result-box" id="finalResultBox">
+                        <div class="comparison-label">Promedio Final (4 Períodos):</div>
+                        <div class="comparison-value" id="promedioFinal" style="margin-top: 8px;">0.00</div>
+                        <div class="comparison-label" id="estadoExamen" style="margin-top: 12px; font-size: 13px; color: #c8e6ff;">-</div>
+                    </div>
                 </div>
 
                 <div class="info-box">
-                    💡 Escala 0-100. Nota: Superior a 60 = Aprobado | Inferior a 60 = Reprobado
+                    💡 Escala 0-100. Nota: Superior a 60 = Aprobado | Inferior a 60 = Reprobado <br><br>
+                    📌 Si el promedio de los 4 períodos es inferior a 60, deberás presentar examen final.
                 </div>
             </div>
         </div>
@@ -955,6 +981,7 @@
         const periodo4 = document.getElementById('periodo4');
         const comparisonResult = document.getElementById('comparisonResult');
         const errorComparador = document.getElementById('errorComparador');
+        const finalResultBox = document.getElementById('finalResultBox');
 
         function getEstadoNotas(media) {
             if (media >= 60) {
@@ -1003,90 +1030,99 @@
                     return num;
                 });
 
-                // Validar rango 0-100
-                const validar = (notas) => notas.every(n => n >= 0 && n <= 100);
-                if (!validar(notas1) || !validar(notas2) || !validar(notas3) || !validar(notas4)) {
-                    mostrarErrorComparador('Las notas deben estar entre 0 y 100');
+                // Validar que todas estén en rango 0-100
+                const todasValidas = [notas1, notas2, notas3, notas4].every(notas =>
+                    notas.every(n => n >= 0 && n <= 100)
+                );
+
+                if (!todasValidas) {
+                    mostrarErrorComparador('Todas las notas deben estar entre 0 y 100');
                     return;
                 }
 
+                // Calcular medias
                 const media1 = notas1.reduce((a, b) => a + b, 0) / notas1.length;
                 const media2 = notas2.reduce((a, b) => a + b, 0) / notas2.length;
                 const media3 = notas3.reduce((a, b) => a + b, 0) / notas3.length;
                 const media4 = notas4.reduce((a, b) => a + b, 0) / notas4.length;
 
-                // Obtener estado de cada período
-                const estado1 = getEstadoNotas(media1);
-                const estado2 = getEstadoNotas(media2);
-                const estado3 = getEstadoNotas(media3);
-                const estado4 = getEstadoNotas(media4);
+                // NUEVA: Calcular promedio final de los 4 períodos
+                const promedioFinal = (media1 + media2 + media3 + media4) / 4;
 
-                // Mostrar medias
+                // Calcular tendencias
+                const tendencias = [];
+                if (media2 > media1) tendencias.push('📈 P1→P2 Mejora');
+                else if (media2 < media1) tendencias.push('📉 P1→P2 Baja');
+                else tendencias.push('➡️ P1→P2 Estable');
+
+                if (media3 > media2) tendencias.push('📈 P2→P3 Mejora');
+                else if (media3 < media2) tendencias.push('📉 P2→P3 Baja');
+                else tendencias.push('➡️ P2→P3 Estable');
+
+                if (media4 > media3) tendencias.push('📈 P3→P4 Mejora');
+                else if (media4 < media3) tendencias.push('📉 P3→P4 Baja');
+                else tendencias.push('➡️ P3→P4 Estable');
+
+                // Actualizar UI
                 document.getElementById('media1').textContent = media1.toFixed(2);
                 document.getElementById('media2').textContent = media2.toFixed(2);
                 document.getElementById('media3').textContent = media3.toFixed(2);
                 document.getElementById('media4').textContent = media4.toFixed(2);
 
-                // Mostrar estado
-                const est1 = document.getElementById('estado1');
-                const est2 = document.getElementById('estado2');
-                const est3 = document.getElementById('estado3');
-                const est4 = document.getElementById('estado4');
+                const estado1 = getEstadoNotas(media1);
+                const estado2 = getEstadoNotas(media2);
+                const estado3 = getEstadoNotas(media3);
+                const estado4 = getEstadoNotas(media4);
 
-                est1.textContent = estado1.text;
-                est1.className = `comparison-label ${estado1.class}`;
+                document.getElementById('estado1').textContent = estado1.text;
+                document.getElementById('estado1').className = `comparison-label ${estado1.class}`;
+
+                document.getElementById('estado2').textContent = estado2.text;
+                document.getElementById('estado2').className = `comparison-label ${estado2.class}`;
+
+                document.getElementById('estado3').textContent = estado3.text;
+                document.getElementById('estado3').className = `comparison-label ${estado3.class}`;
+
+                document.getElementById('estado4').textContent = estado4.text;
+                document.getElementById('estado4').className = `comparison-label ${estado4.class}`;
+
+                // Tendencia general
+                const tendenciaGeneral = media4 > media1 ? '📈 Tendencia: Mejora' : media4 < media1 ? '📉 Tendencia: Baja' : '➡️ Tendencia: Estable';
+                document.getElementById('tendencia').textContent = tendenciaGeneral;
+                document.getElementById('detalleProgreso').textContent = tendencias.join(' • ');
+
+                // NUEVA: Mostrar promedio final y necesidad de examen
+                document.getElementById('promedioFinal').textContent = promedioFinal.toFixed(2);
                 
-                est2.textContent = estado2.text;
-                est2.className = `comparison-label ${estado2.class}`;
-                
-                est3.textContent = estado3.text;
-                est3.className = `comparison-label ${estado3.class}`;
-                
-                est4.textContent = estado4.text;
-                est4.className = `comparison-label ${estado4.class}`;
-
-                // Calcular tendencia general
-                const promedioPeriodos = (media1 + media2 + media3 + media4) / 4;
-                const diferencia = media4 - media1;
-
-                let tendencia = '';
-                let trendiconClass = '';
-                let detalle = '';
-
-                if (diferencia > 5) {
-                    tendencia = '📈 Mejorando Mucho';
-                    trendiconClass = 'trend-up';
-                    detalle = `Excelente progreso: +${diferencia.toFixed(2)} puntos`;
-                } else if (diferencia > 0) {
-                    tendencia = '📈 Mejorando';
-                    trendiconClass = 'trend-up';
-                    detalle = `Buen progreso: +${diferencia.toFixed(2)} puntos`;
-                } else if (diferencia < -5) {
-                    tendencia = '📉 Empeorando Mucho';
-                    trendiconClass = 'trend-down';
-                    detalle = `Necesitas enfocarte: ${diferencia.toFixed(2)} puntos`;
-                } else if (diferencia < 0) {
-                    tendencia = '📉 Empeorando';
-                    trendiconClass = 'trend-down';
-                    detalle = `Pequena caida: ${diferencia.toFixed(2)} puntos`;
+                const estadoExamenElement = document.getElementById('estadoExamen');
+                if (promedioFinal < 60) {
+                    estadoExamenElement.innerHTML = `
+                        <span style="color: #ff9696; font-weight: 600;">⚠️ NECESITA EXAMEN FINAL</span><br>
+                        <span style="color: #e0e0e0; font-size: 12px; margin-top: 8px; display: block;">
+                            Tu promedio es <strong>${promedioFinal.toFixed(2)}</strong>. 
+                            Necesitas presentar examen final para tener oportunidad de aprobar.
+                        </span>
+                    `;
+                    finalResultBox.className = 'final-result-box needs-exam';
                 } else {
-                    tendencia = '➡️ Estable';
-                    trendiconClass = 'trend-stable';
-                    detalle = 'Notas sin cambios significativos';
+                    estadoExamenElement.innerHTML = `
+                        <span style="color: #00ff64; font-weight: 600;">✅ NO NECESITA EXAMEN FINAL</span><br>
+                        <span style="color: #e0e0e0; font-size: 12px; margin-top: 8px; display: block;">
+                            ¡Felicidades! Tu promedio es <strong>${promedioFinal.toFixed(2)}</strong>. 
+                            ¡Has aprovechado satisfactoriamente!
+                        </span>
+                    `;
+                    finalResultBox.className = 'final-result-box no-exam';
                 }
-
-                const tendenciaEl = document.getElementById('tendencia');
-                tendenciaEl.textContent = tendencia;
-                tendenciaEl.className = 'comparison-value ' + trendiconClass;
-
-                const detalleEl = document.getElementById('detalleProgreso');
-                detalleEl.textContent = detalle + ' | Promedio: ' + promedioPeriodos.toFixed(2);
-                detalleEl.className = 'comparison-label';
 
                 comparisonResult.classList.add('show');
 
             } catch (e) {
-                mostrarErrorComparador('Formato inválido. Usa números separados por comas');
+                if (e.message === 'formato') {
+                    mostrarErrorComparador('Formato inválido. Usa números separados por comas');
+                } else {
+                    mostrarErrorComparador('Error al procesar los períodos');
+                }
             }
         }
 
@@ -1104,11 +1140,6 @@
             errorComparador.textContent = mensaje;
             errorComparador.classList.add('show');
         }
-
-        // Enfocar en el primer input al cargar
-        window.addEventListener('load', function() {
-            inputNotas.focus();
-        });
     </script>
 </body>
 </html>
