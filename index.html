@@ -519,7 +519,7 @@
                     <input 
                         type="text" 
                         id="notas" 
-                        placeholder="Exemple: 65, 70, 80, 85, 90"
+                        placeholder="Exemple: 6.5, 7.0, 8.0, 8.5, 9.0"
                         autocomplete="off"
                     >
                     <div class="error-message" id="errorMessage"></div>
@@ -556,7 +556,7 @@
                 </div>
 
                 <div class="info-box">
-                    💡 Échelle 0-100. Séparez les notes avec des virgules. Exemple: <strong>65, 70, 80, 85, 90</strong>
+                    💡 Échelle 0-10. Séparez les notes avec des virgules. Exemple: <strong>6.5, 7.0, 8.0, 8.5, 9.0</strong>
                 </div>
             </div>
 
@@ -572,7 +572,7 @@
                     <input 
                         type="text" 
                         id="periodo1" 
-                        placeholder="Exemple: 65, 70, 75"
+                        placeholder="Exemple: 6.5, 7.0, 7.5"
                         autocomplete="off"
                     >
                 </div>
@@ -582,7 +582,7 @@
                     <input 
                         type="text" 
                         id="periodo2" 
-                        placeholder="Exemple: 70, 75, 80"
+                        placeholder="Exemple: 7.0, 7.5, 8.0"
                         autocomplete="off"
                     >
                 </div>
@@ -592,7 +592,7 @@
                     <input 
                         type="text" 
                         id="periodo3" 
-                        placeholder="Exemple: 75, 78, 82"
+                        placeholder="Exemple: 7.5, 7.8, 8.2"
                         autocomplete="off"
                     >
                 </div>
@@ -602,7 +602,7 @@
                     <input 
                         type="text" 
                         id="periodo4" 
-                        placeholder="Exemple: 80, 82, 85"
+                        placeholder="Exemple: 8.0, 8.2, 8.5"
                         autocomplete="off"
                     >
                 </div>
@@ -653,8 +653,8 @@
                 </div>
 
                 <div class="info-box">
-                    💡 Échelle 0-100. Note: Supérieur à 60 = Réussi | Inférieur à 60 = Échoué <br><br>
-                    📌 Si la moyenne des 4 périodes est inférieure à 60, vous devrez passer l'examen final.
+                    💡 Échelle 0-10. Note: Supérieur à 6 = Réussi | Inférieur à 6 = Échoué <br><br>
+                    📌 Si la moyenne des 4 périodes est inférieure à 6, vous devrez passer l'examen final.
                 </div>
             </div>
         </div>
@@ -679,7 +679,7 @@
         }
 
         // ============================================
-        // CALCULATRICE DE MOYENNE - ÉCHELLE 0-100
+        // CALCULATRICE DE MOYENNE - ÉCHELLE 0-10
         // ============================================
         const inputNotas = document.getElementById('notas');
         const resultBox = document.getElementById('resultBox');
@@ -692,21 +692,21 @@
         });
 
         function getPerformanceData(media) {
-            if (media >= 80) {
+            if (media >= 8) {
                 return {
                     level: 'excellent',
                     badge: '⭐ Excellent Rendement',
                     description: 'Vous avez démontré des performances exceptionnelles. Vos notes sont au plus haut niveau!',
                     motivation: '🌟 Félicitations! Vous maîtrisez parfaitement ces sujets. Continuez à maintenir cet excellent rendement et envisagez d\'aider d\'autres camarades.'
                 };
-            } else if (media >= 70) {
+            } else if (media >= 7) {
                 return {
                     level: 'good',
                     badge: '✅ Bon Travail',
                     description: 'Votre rendement est solide et stable. Vous êtes sur la bonne voie.',
                     motivation: '💪 Très bien! Vous avez montré une bonne performance. Avec un peu plus d\'effort, vous pouvez atteindre l\'excellence.'
                 };
-            } else if (media >= 60) {
+            } else if (media >= 6) {
                 return {
                     level: 'fair',
                     badge: '📌 Juste Passable',
@@ -750,9 +750,9 @@
                     return;
                 }
 
-                const notasValidas = notas.every(n => n >= 0 && n <= 100);
+                const notasValidas = notas.every(n => n >= 0 && n <= 10);
                 if (!notasValidas) {
-                    mostrarError('Les notes doivent être entre 0 et 100');
+                    mostrarError('Les notes doivent être entre 0 et 10');
                     return;
                 }
 
@@ -804,7 +804,7 @@
         }
 
         // ============================================
-        // COMPARATEUR DE NOTES (4 PERIODES) - ÉCHELLE 0-100
+        // COMPARATEUR DE NOTES (4 PERIODES) - ÉCHELLE 0-10
         // ============================================
         const periodo1 = document.getElementById('periodo1');
         const periodo2 = document.getElementById('periodo2');
@@ -815,7 +815,7 @@
         const finalResultBox = document.getElementById('finalResultBox');
 
         function getEstadoNotas(media) {
-            if (media >= 60) {
+            if (media >= 6) {
                 return { text: '✅ Réussi', class: 'aprobado' };
             } else {
                 return { text: '❌ Échoué', class: 'desaprobado' };
@@ -923,7 +923,7 @@
 
                 // Estado del examen
                 const estadoExamen = document.getElementById('estadoExamen');
-                if (promedioFinal < 60) {
+                if (promedioFinal < 6) {
                     finalResultBox.className = 'final-result-box needs-exam';
                     estadoExamen.textContent = '⚠️ Vous devez passer l\'examen final';
                     estadoExamen.style.color = '#ff9696';
